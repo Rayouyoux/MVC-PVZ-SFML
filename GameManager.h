@@ -36,6 +36,8 @@ public:
 
 	void		Start();
 
+	~GameManager();
+
 private:
 
 	// Main Methods

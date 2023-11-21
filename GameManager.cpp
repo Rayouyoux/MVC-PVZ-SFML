@@ -21,8 +21,8 @@ GameManager::GameManager(){
 	}
 	background = new sf::Sprite();
 	background->setTexture(*texture);
-	background->setOrigin(0.5f, 0.5f);
-	//background->setPosition(960, 540);
+	background->setOrigin(860, 540);
+	background->setPosition(860, 540);
 }
 
 void GameManager::HandleEvents() {
@@ -52,5 +52,9 @@ void		GameManager::Start() {
 	{
 		HandleEvents();
 	}
+}
+
+GameManager::~GameManager() {
+	
 }
 
