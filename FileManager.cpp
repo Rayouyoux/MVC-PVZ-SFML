@@ -99,6 +99,6 @@ std::map<int, std::vector<std::string>> FileManager::getWavesMap(std::vector<std
     return mLevelWaves;
 }
 
-void createLevel(std::map<std::string, std::string> mLevelInfos, std::map<std::string, std::vector<std::string>> mLevelWaves) {
+void FileManager::createLevel(std::map<std::string, std::string> mLevelInfos, std::map<std::string, std::vector<std::string>> mLevelWaves) {
 
 }
