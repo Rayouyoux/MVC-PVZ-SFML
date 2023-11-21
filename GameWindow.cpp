@@ -13,8 +13,8 @@ GameWindow::GameWindow() {
 
 	//Setting up the window
 	w_window = new sf::RenderWindow(sf::VideoMode((unsigned int)width, (unsigned int)height), name);
-	sf::View view(sf::Vector2f(960, 540), sf::Vector2f(1920, 1080));
-	w_window->setView(view);
+	sf::View *view = new View(sf::Vector2f(960, 540), sf::Vector2f(1920, 1080));
+	w_window->setView(*view);
 
 	//Setting up the icon
 
@@ -49,6 +49,7 @@ float GameWindow::GetHeight() {
 
 void	GameWindow::Clear() {
 	w_window->clear();
+	w_window->display();
 }
 
 void	GameWindow::Close() {
