@@ -9,19 +9,38 @@ Menu::Menu(GameWindow *window) {
 	m_loop = true;
 
 	m_window = window;
-	//if (!m_music->openFromFile("rsrc/music/menu/menu.ogg"))
-	//{
-	//	std::cout << "Error loading menu.ogg" << std::endl;
-	//	exit(1);
-	//}
-	//m_music->play();
-	//m_music->setVolume(10.0f);
-	//m_music->setLoop(true);
+}
+
+void	Menu::Init() {
+	sf::Texture	*menuTexture = new sf::Texture();
+	m_background = new sf::Sprite();
+
+	if (!menuTexture->loadFromFile("rsrc/img/menu.png")) {
+		std::cout << "Error loading menu.png" << std::endl;
+		exit(1);
+	}
+	m_background->setTexture(*menuTexture);
+	m_background->setOrigin(860, 540);
+	m_background->setPosition(860, 540);
+	m_window->Clear();
+	m_window->w_window->draw(*m_background);
+	m_window->w_window->display();
+
+	m_music = new Music();
+	if (!m_music->openFromFile("rsrc/music/menu/menu.ogg"))
+	{
+		std::cout << "Error loading menu.ogg" << std::endl;
+		exit(1);
+	}
+	m_music->play();
+	m_music->setVolume(10.0f);
+	m_music->setLoop(true);
 }
 
 void	Menu::Start(){
 	Event	event;
 
+	Init();
 	Display();
 	while (m_loop) {
 		while (m_window->w_window->pollEvent(event))
@@ -34,7 +53,8 @@ void	Menu::Start(){
 		}
 		//ChooseLevel();
 	}
-
+	m_music->stop();
+	delete m_music;
 	m_window->Clear();
 }
 
@@ -53,6 +73,6 @@ void	Menu::Display() {
 }
 
 Menu::~Menu(){
-	//m_music->stop();
-	//delete m_music;
+	m_music->stop();
+	delete m_music;
 }
