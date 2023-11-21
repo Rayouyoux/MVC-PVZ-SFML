@@ -54,18 +54,18 @@ int FileManager::getInfoPos(std::vector<std::string> vsFileLines) {
     return iIndex;
 }
 
-std::map<std::string, std::map<std::string, std::string>> FileManager::getLevelInfoMap(std::vector<std::string> vsFileLines) {
+std::map<std::string, std::map<std::string, int>> FileManager::getLevelInfoMap(std::vector<std::string> vsFileLines) {
     int iIndex = getInfoPos(vsFileLines);
-    std::map<std::string, std::map < std::string, std::string>> mLevelInformations;
+    std::map<std::string, std::map < std::string, int>> mLevelInformations;
 
     for (int i = iIndex; i < vsFileLines.size(); i = i + 5) {
-        std::map<std::string, std::string> mZombieInfos;
+        std::map<std::string, int> mZombieInfos;
 
         for (int j = 1; j < 4; j++) {
             std::size_t iColonPos = vsFileLines[i + j].find(':');
             std::string sStatName = vsFileLines[i + j].substr(0, iColonPos);
             std::string sStatValue = vsFileLines[i + j].substr(iColonPos + 1);
-            mZombieInfos[sStatName] = sStatValue;
+            mZombieInfos[sStatName] = std::stoi(sStatValue);
         }
 
         std::size_t iInfoPos = vsFileLines[i].find("Infos");
