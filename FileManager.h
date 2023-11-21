@@ -7,17 +7,19 @@
 
 class FileManager {
 private:
-    std::string file_name;
+    std::string m_sFileName;
 
 public:
-    FileManager(const std::string& filename);
+    FileManager(const std::string& sFilename);
 
     std::vector<std::string> readFileLines();
 
-    std::map<std::string, std::string> getStatsMap(std::vector<std::string> fileLines);
-    float getStat(std::map<std::string, std::string> stats, std::string seekedStat);
+    std::map<std::string, std::string> getStatsMap(std::vector<std::string> vsFileLines);
+    float getStat(std::map<std::string, std::string> mStats, std::string sStat);
 
-
+    std::map<std::string, std::string> getLevelInfoMap(std::vector<std::string> fileLines);
+    std::map<std::string, std::vector<std::string>> getWavesMap(std::vector<std::string> fileLines);
+    void createLevel(std::map<std::string, std::string> mLevelInfo, std::map<std::string, std::vector<std::string>> mLevelWaves);
 };
 
-#endif /* FILEMANAGER_H */
+#endif 

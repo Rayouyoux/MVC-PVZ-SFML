@@ -2,11 +2,11 @@
 #include <iostream>
 #include <fstream>
 
-FileManager::FileManager(const std::string& filename) : file_name(filename) {}
+FileManager::FileManager(const std::string& sFilename) : m_sFileName(sFilename) {}
 
 std::vector<std::string> FileManager::readFileLines() {
     std::vector<std::string> lines;
-    std::ifstream file(file_name);
+    std::ifstream file(m_sFileName);
 
     if (file.is_open()) {
         std::string line;
@@ -16,38 +16,25 @@ std::vector<std::string> FileManager::readFileLines() {
         file.close();
     }
     else {
-        std::cerr << "Unable to open file: " << file_name << std::endl;
+        std::cerr << "Unable to open file: " << m_sFileName << std::endl;
     }
 
     return lines;
 }
 
-std::map<std::string, std::string> FileManager::getStatsMap(std::vector<std::string> fileLines) {
-    std::map<std::string, std::string> stats;
+std::map<std::string, std::string> FileManager::getStatsMap(std::vector<std::string> vsFileLines) {
+    std::map<std::string, std::string> mStats;
 
-    for (int i = 0; i < fileLines.size(); i++) {
-        std::size_t pos = fileLines[i].find(':');
-        stats[fileLines[i].substr(0, pos)] = fileLines[i].substr(pos + 1);
+    for (int i = 0; i < vsFileLines.size(); i++) {
+        std::size_t pos = vsFileLines[i].find(':');
+        mStats[vsFileLines[i].substr(0, pos)] = vsFileLines[i].substr(pos + 1);
     }
 
-    return stats;
+    return mStats;
 }
 
 
-float FileManager::getStat(std::map<std::string, std::string> stats, std::string seekedStat) {
-    return std::stof(stats[seekedStat]);
+float FileManager::getStat(std::map<std::string, std::string> mStats, std::string sStat) {
+    return std::stof(mStats[sStat]);
 }
 
-
-/*
-void FileManager::createLevel(std::vector<std::string> asLevel) {
-    std::map<char, std::string> levelInformation;
-
-    for (int i = 3; i < asLevel.size(); i++) {
-        levelInformation[asLevel[i][0]] = asLevel[i].substr(1);
-    }
-
-    
-
-}
-*/
