@@ -7,11 +7,11 @@ class GameObject
 {
 private:
 
-	sf::Vector2f m_position;
+	
 	sf::Vector2f m_size;
 
 public:
-
+	sf::Vector2f m_position;
 	sf::Sprite* m_sprite;
 
 	GameObject();

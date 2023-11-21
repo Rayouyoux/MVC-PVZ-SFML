@@ -14,7 +14,7 @@ private:
 	bool		isDone;
 	bool		hasWon;
 	bool		hasLost;
-
+	float		fDeltaTime;
 	// Window Attributes
 
 	GameWindow*	window;
@@ -43,5 +43,6 @@ private:
 	// Main Methods
 
 	void		HandleEvents();
+	void		LimitFps(float fps);
 };
 
