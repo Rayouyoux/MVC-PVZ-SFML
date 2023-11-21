@@ -17,17 +17,32 @@ private:
 
 public:
 
-	Menu(GameWindow *window);
+	Menu(GameWindow *window, sf::Music *music);
 
 
 	void	Start();
+	int		GetVolume();
 
 	~Menu();
 
 private:
+	
+	// Main Buttons
 
-	bool	StartButton();
 	bool	ExitButton();
+	bool	OptionButton();
+	bool	StartButton();
+	void	InitOptions();
+	void	Options();
+
+	// Options Buttons
+
+	bool	OptionExitButton();
+	bool	OptionMenuButton();
+	bool	OptionMuteButton();
+
+
+	// Display related
 	void	Display();
 	void	Init();
 };

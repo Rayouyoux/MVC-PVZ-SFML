@@ -94,10 +94,12 @@ void		GameManager::RenderGame() {
 */
 
 void		GameManager::Start() {
-	Menu	menu(window);
+	Menu	menu(window, music);
 
 	menu.Start();
+	
 	music->play();
+	music->setVolume(menu.GetVolume());
 	sf::sleep(sf::milliseconds(200));
 	window->Clear();
 	while (!isDone)
