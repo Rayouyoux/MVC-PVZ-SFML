@@ -26,6 +26,8 @@ public:
 
 private:
 
+	bool	StartButton();
+	bool	ExitButton();
 	void	Display();
 	void	Init();
 };

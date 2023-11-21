@@ -22,7 +22,7 @@ GameManager::GameManager(){
 	hasWon = false;
 	hasLost = false;
 
-	money = 500;
+	money = 1000;
 
 	window = new GameWindow();
 	sf::Texture* texture = new sf::Texture();
@@ -39,12 +39,11 @@ GameManager::GameManager(){
 	hud = new Hud(window);
 
 	music = new Music();
-	if (!music->openFromFile("rsrc/music/levels/level1.ogg"))
+	if (!music->openFromFile("rsrc/music/levels/level.ogg"))
 	{
-		std::cout << "Error loading level1.ogg" << std::endl;
+		std::cout << "Error loading level.ogg" << std::endl;
 		exit(1);
 	}
-	music->play();
 	music->setVolume(10.0f);
 	music->setLoop(true);
 }
@@ -98,6 +97,7 @@ void		GameManager::Start() {
 	Menu	menu(window);
 
 	menu.Start();
+	music->play();
 	sf::sleep(sf::milliseconds(200));
 	window->Clear();
 	while (!isDone)
@@ -130,17 +130,20 @@ bool GameManager::IsOnPlay() {
 void GameManager::HandleEvents() {
 	Event	event;
 
-	while (window->w_window->pollEvent(event))
-	{
-		sf::Vector2i localposition = sf::Mouse::getPosition(*window->w_window);
-		if (event.type == Event::Closed)
-			window->Close();
-		if (Mouse::isButtonPressed(Mouse::Button::Left) and IsOnPlay())
-			std::cout << "PLAY" << std::endl;
-		else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
-			if (money >= 100)
-				PlacePlante();
+	while (true) {
+		while (window->w_window->pollEvent(event))
+		{
+			sf::Vector2i localposition = sf::Mouse::getPosition(*window->w_window);
+			if (event.type == Event::Closed)
+				window->Close();
+			if (Mouse::isButtonPressed(Mouse::Button::Left) and IsOnPlay())
+				std::cout << "PLAY" << std::endl;
+			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
+				if (money >= 100)
+					PlacePlante();
+			}
+			RenderGame();
 		}
-		RenderGame();
+		
 	}
 }
