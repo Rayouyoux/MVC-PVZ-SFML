@@ -22,6 +22,21 @@ std::vector<std::string> FileManager::readFileLines() {
     return lines;
 }
 
+std::map<std::string, std::string> FileManager::getStatsMap(std::vector<std::string> fileLines) {
+    std::map<std::string, std::string> stats;
+
+    for (int i = 0; i < fileLines.size(); i++) {
+        std::size_t pos = fileLines[i].find(':');
+        stats[fileLines[i].substr(0, pos)] = fileLines[i].substr(pos + 1);
+    }
+
+    return stats;
+}
+
+
+float FileManager::getStat(std::map<std::string, std::string> stats, std::string seekedStat) {
+    return std::stof(stats[seekedStat]);
+}
 
 
 /*

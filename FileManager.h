@@ -14,7 +14,8 @@ public:
 
     std::vector<std::string> readFileLines();
 
-    std::vector<
+    std::map<std::string, std::string> getStatsMap(std::vector<std::string> fileLines);
+    float getStat(std::map<std::string, std::string> stats, std::string seekedStat);
 };
 
 #endif /* FILEMANAGER_H */
