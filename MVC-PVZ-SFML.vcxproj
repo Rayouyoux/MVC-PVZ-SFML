@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="GameWindow.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="main.cpp" />
@@ -140,6 +141,7 @@
     <ClCompile Include="Plante.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FileManager.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameWindow.h" />
