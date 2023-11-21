@@ -5,24 +5,22 @@
 #include <vector>
 #include <map>
 
-using namespace std;
-
 class FileManager {
 private:
-    string m_sFileName;
+    std::string m_sFileName;
 
 public:
-    FileManager(const string& sFilename);
+    FileManager(const std::string& sFilename);
 
-    vector<string>              readFileLines();
+    std::vector<std::string> readFileLines();
 
-    map<string, string>         getStatsMap(vector<string> vsFileLines);
-    float                       getStat(map<string, string> mStats, string sStat);
+    std::map<std::string, std::string> getStatsMap(std::vector<std::string> vsFileLines);
+    float getStat(std::map<std::string, std::string> mStats, std::string sStat);
 
-    map<string, string>         getLevelInfoMap(vector<string> fileLines);
-    map<string, vector<string>> getWavesMap(vector<string> fileLines);
-
-    void                        createLevel(map<string, string> mLevelInfo, map<string, vector<string>> mLevelWaves);
+    int getInfoPos(std::vector<std::string> vsFileLines);
+    std::map<std::string, std::map<std::string, int>> getLevelInfoMap(std::vector<std::string> vsFileLines);
+    std::map<int, std::vector<std::string>> getWavesMap(std::vector<std::string> vsFileLines);
+    void createLevel(std::map<std::string, std::string> mLevelInfos, std::map<std::string, std::vector<std::string>> mLevelWaves);
 };
 
 #endif 
