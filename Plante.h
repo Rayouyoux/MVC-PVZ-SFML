@@ -1,6 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
+class GameWindow;
+
 class Plante : public GameObject
 {
 private:
@@ -18,6 +20,7 @@ public:
 
 	// Main Methods
 	
+	bool	CanBePlaced(GameWindow* window);
 	int		GetHP();
 	int		GetHPmax();
 	bool	GetPowerUpStatus();

@@ -2,31 +2,33 @@
 #include <iostream>
 #include <fstream>
 
-FileManager::FileManager(const std::string& sFilename) : m_sFileName(sFilename) {}
+using namespace std;
 
-std::vector<std::string> FileManager::readFileLines() {
-    std::vector<std::string> lines;
-    std::ifstream file(m_sFileName);
+FileManager::FileManager(const string& sFilename) : m_sFileName(sFilename) {}
+
+vector<string> FileManager::readFileLines() {
+    vector<string> lines;
+    ifstream file(m_sFileName);
 
     if (file.is_open()) {
-        std::string line;
-        while (std::getline(file, line)) {
+        string line;
+        while (getline(file, line)) {
             lines.push_back(line);
         }
         file.close();
     }
     else {
-        std::cerr << "Unable to open file: " << m_sFileName << std::endl;
+        cerr << "Unable to open file: " << m_sFileName << endl;
     }
 
     return lines;
 }
 
-std::map<std::string, std::string> FileManager::getStatsMap(std::vector<std::string> vsFileLines) {
-    std::map<std::string, std::string> mStats;
+map<string, string> FileManager::getStatsMap(vector<string> vsFileLines) {
+    map<string, string> mStats;
 
     for (int i = 0; i < vsFileLines.size(); i++) {
-        std::size_t pos = vsFileLines[i].find(':');
+        size_t pos = vsFileLines[i].find(':');
         mStats[vsFileLines[i].substr(0, pos)] = vsFileLines[i].substr(pos + 1);
     }
 
@@ -34,7 +36,7 @@ std::map<std::string, std::string> FileManager::getStatsMap(std::vector<std::str
 }
 
 
-float FileManager::getStat(std::map<std::string, std::string> mStats, std::string sStat) {
-    return std::stof(mStats[sStat]);
+float FileManager::getStat(map<string, string> mStats, string sStat) {
+    return stof(mStats[sStat]);
 }
 

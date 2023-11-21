@@ -1,9 +1,12 @@
 #pragma once
 
-#include <SFML/System/Vector2.hpp>
+#include <vector>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 class GameWindow;
+class Plante;
+class Hud;
 
 class GameManager
 {
@@ -17,15 +20,17 @@ private:
 
 	// Window Attributes
 
-	GameWindow*	window;
-	sf::Sprite* background;
-	//Vector2f	MousePos;
+	GameWindow	*window;
+	Hud			*hud;
+	sf::Sprite	*background;
+	sf::Music	*music;
 
 	// Objects Attributes
 
+	int						money;
 	//std::vector<Ball*>	balls;
 	//std::vector<Zombie*>	zombies;
-	//std::vector<Plante*>	plantes;
+	std::vector<Plante*>	plantes;
 	
 
 
@@ -42,6 +47,11 @@ private:
 
 	// Main Methods
 
+	void		PlacePlante();
+
 	void		HandleEvents();
+	bool		IsOnPlay();
+
+	void		RenderGame();
 };
 

@@ -9,6 +9,9 @@ Menu::Menu(GameWindow *window) {
 	m_loop = true;
 
 	m_window = window;
+
+	m_background = NULL;
+	m_music = NULL;
 }
 
 void	Menu::Init() {

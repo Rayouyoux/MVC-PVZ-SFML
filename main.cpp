@@ -8,7 +8,6 @@ using namespace sf;
 int main()
 {
 	GameManager game;
-	Event		event;
 
 	// Pour l'instant ici parce que nique et qu'en attendant la version stylée on aura ca
 

@@ -2,6 +2,8 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
+class GameObject;
+
 using namespace sf;
 
 class GameWindow
@@ -24,6 +26,8 @@ public:
 
 	// Main Methods
 
+	void				DrawObject(GameObject* object);
+	void				Display();
 	void				Clear();
 	void				Close();
 

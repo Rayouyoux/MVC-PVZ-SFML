@@ -1,7 +1,9 @@
+#include "GameWindow.h"
+
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-#include "GameWindow.h"
+#include  "GameObject.h"
 
 GameWindow::GameWindow() {
 
@@ -47,9 +49,16 @@ float GameWindow::GetHeight() {
 ---------------------------------------------------------------------------------
 */
 
+void	GameWindow::DrawObject(GameObject *object) {
+	w_window->draw(*object->m_sprite);
+}
+
+void	GameWindow::Display() {
+	w_window->display();
+}
+
 void	GameWindow::Clear() {
 	w_window->clear();
-	w_window->display();
 }
 
 void	GameWindow::Close() {
