@@ -7,10 +7,10 @@
 
 class FileManager {
 private:
-    std::string m_sFileName;
+    std::string m_sFilePath;
 
 public:
-    FileManager(const std::string& sFilename);
+    FileManager(const std::string& sFilePath);
 
     std::vector<std::string> readFileLines();
 
@@ -19,8 +19,7 @@ public:
 
     int getInfoPos(std::vector<std::string> vsFileLines);
     std::map<std::string, std::map<std::string, int>> getLevelInfoMap(std::vector<std::string> vsFileLines);
-    std::map<int, std::vector<std::string>> getWavesMap(std::vector<std::string> vsFileLines);
-    void createLevel(std::map<std::string, std::string> mLevelInfos, std::map<std::string, std::vector<std::string>> mLevelWaves);
+    std::map<int, std::vector<std::string>> getLevelWavesMap(std::vector<std::string> vsFileLines);
 };
 
 #endif 
