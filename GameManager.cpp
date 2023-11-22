@@ -135,7 +135,7 @@ void		GameManager::RenderGame() {
 		for (int i = 0; i < plantes.size(); ++i)
 			window->DrawObject(plantes.at(i));
 	}
-	// à bouger dans le moove zombie
+	// Ã  bouger dans le moove zombie
 	if (!bullets.empty()) {
 		for (int i = 0; i < bullets.size(); i++) {
 			bullets[i]->Move(fDeltaTime);
@@ -228,8 +228,9 @@ void GameManager::HandleEvents() {
 				for (int i = 0; i < suns.size(); i++) {
 					if (((suns[i]->GetPosistion().x - suns[i]->GetSize().x / 2) < localposition.x && (suns[i]->GetPosistion().x + suns[i]->GetSize().x / 2) > localposition.x)
 						&& ((suns[i]->GetPosistion().y - suns[i]->GetSize().y / 2) < localposition.y && (suns[i]->GetPosistion().y + suns[i]->GetSize().y/2) > localposition.y)) {
+						money += suns[i]->m_value;
 						suns.erase(suns.begin() + i);
-						money += 20;
+						
 					}
 				}
 				if (money >= 100)

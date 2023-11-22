@@ -11,7 +11,7 @@ private:
 
 public:
 	Sun();
-
+	float		m_value;
 	void		SetSpeed(float s);
 	void		SetDirection(float x, float y);
 	void		Move(float dt);
