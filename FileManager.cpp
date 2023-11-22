@@ -2,28 +2,28 @@
 #include <iostream>
 #include <fstream>
 
-FileManager::FileManager(const std::string& sFilePath) : m_sFilePath(sFilePath) {}
+FileManager::FileManager(const string& sFilePath) : m_sFilePath(sFilePath) {}
 
-std::vector<std::string> FileManager::readFileLines() {
-    std::vector<std::string> sLines;
-    std::ifstream fFile(m_sFilePath);
+vector<string> FileManager::readFileLines() {
+    vector<string> sLines;
+    ifstream fFile(m_sFilePath);
 
     if (fFile.is_open()) {
-        std::string sLine;
-        while (std::getline(fFile, sLine)) {
+        string sLine;
+        while (getline(fFile, sLine)) {
             sLines.push_back(sLine);
         }
         fFile.close();
     }
     else {
-        std::cerr << "Unable to open file: " << m_sFilePath << std::endl;
+        cerr << "Unable to open file: " << m_sFilePath << endl;
     }
 
     return sLines;
 }
 
-std::map<std::string, std::string> FileManager::getStatsMap(std::vector<std::string> vsFileLines) {
-    std::map<std::string, std::string> mStats;
+map<string, string> FileManager::getStatsMap(vector<string> vsFileLines) {
+    map<string, string> mStats;
 
     for (int i = 0; i < vsFileLines.size(); i++) {
         size_t iPos = vsFileLines[i].find(':');
@@ -33,43 +33,43 @@ std::map<std::string, std::string> FileManager::getStatsMap(std::vector<std::str
     return mStats;
 }
 
-float FileManager::getStat(std::map<std::string, std::string> mStats, std::string sStat) {
-    return std::stof(mStats[sStat]);
+float FileManager::getStat(map<string, string> mStats, string sStat) {
+    return stof(mStats[sStat]);
 }
 
-int FileManager::getInfoPos(std::vector<std::string> vsFileLines) {
+int FileManager::getInfoPos(vector<string> vsFileLines) {
     int iIndex = 0;
-    std::string searchString = "InfosA";
+    string searchString = "InfosA";
 
-    auto it = std::find(vsFileLines.begin(), vsFileLines.end(), searchString);
+    auto it = find(vsFileLines.begin(), vsFileLines.end(), searchString);
 
     if (it != vsFileLines.end()) {
-        iIndex = std::distance(vsFileLines.begin(), it);
+        iIndex = distance(vsFileLines.begin(), it);
     }
     else {
-        std::cout << "String not found." << std::endl;
+        cout << "String not found." << endl;
         return -1;
     }
 
     return iIndex;
 }
 
-std::map<std::string, std::map<std::string, int>> FileManager::getLevelInfoMap(std::vector<std::string> vsFileLines) {
+map<string, map<string, int>> FileManager::getLevelInfoMap(vector<string> vsFileLines) {
     int iIndex = getInfoPos(vsFileLines);
-    std::map<std::string, std::map < std::string, int>> mLevelInformations;
+    map<string, map < string, int>> mLevelInformations;
 
     for (int i = iIndex; i < vsFileLines.size(); i = i + 5) {
-        std::map<std::string, int> mZombieInfos;
+        map<string, int> mZombieInfos;
 
         for (int j = 1; j < 4; j++) {
-            std::size_t iColonPos = vsFileLines[i + j].find(':');
-            std::string sStatName = vsFileLines[i + j].substr(0, iColonPos);
-            std::string sStatValue = vsFileLines[i + j].substr(iColonPos + 1);
-            mZombieInfos[sStatName] = std::stoi(sStatValue);
+            size_t iColonPos = vsFileLines[i + j].find(':');
+            string sStatName = vsFileLines[i + j].substr(0, iColonPos);
+            string sStatValue = vsFileLines[i + j].substr(iColonPos + 1);
+            mZombieInfos[sStatName] = stoi(sStatValue);
         }
 
-        std::size_t iInfoPos = vsFileLines[i].find("Infos");
-        std::string sZombieLetter = vsFileLines[i].substr(iInfoPos + 5);
+        size_t iInfoPos = vsFileLines[i].find("Infos");
+        string sZombieLetter = vsFileLines[i].substr(iInfoPos + 5);
         mLevelInformations[sZombieLetter] = mZombieInfos;
 
         mZombieInfos.clear();
@@ -78,19 +78,19 @@ std::map<std::string, std::map<std::string, int>> FileManager::getLevelInfoMap(s
     return mLevelInformations;
 }
 
-std::map<int, std::vector<std::string>> FileManager::getLevelWavesMap(std::vector<std::string> vsFileLines) {
+map<int, vector<string>> FileManager::getLevelWavesMap(vector<string> vsFileLines) {
     int iIndex = getInfoPos(vsFileLines);
-    std::map<int, std::vector<std::string>> mLevelWaves;
+    map<int, vector<string>> mLevelWaves;
 
     for (int i = 0; i < iIndex; i = i + 7) {
-        std::vector<std::string> vsWaveInfos;
+        vector<string> vsWaveInfos;
 
         for (int j = 1; j < 6; j++) {
             vsWaveInfos.push_back(vsFileLines[i + j]);
         }
 
-        std::size_t iPos = vsFileLines[i].find("Wave");
-        int iWaveNumber = std::stoi(vsFileLines[i].substr(iPos + 4));
+        size_t iPos = vsFileLines[i].find("Wave");
+        int iWaveNumber = stoi(vsFileLines[i].substr(iPos + 4));
         mLevelWaves[iWaveNumber] = vsWaveInfos;
 
         vsWaveInfos.clear();
@@ -98,3 +98,5 @@ std::map<int, std::vector<std::string>> FileManager::getLevelWavesMap(std::vecto
 
     return mLevelWaves;
 }
+
+FileManager::~FileManager() {}

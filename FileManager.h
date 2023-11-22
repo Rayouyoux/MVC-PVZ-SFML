@@ -5,21 +5,32 @@
 #include <vector>
 #include <map>
 
+using namespace std;
+
 class FileManager {
 private:
-    std::string m_sFilePath;
+
+    string m_sFilePath;
 
 public:
-    FileManager(const std::string& sFilePath);
 
-    std::vector<std::string> readFileLines();
+    // Constructor
+    FileManager(const string& sFilePath);
 
-    std::map<std::string, std::string> getStatsMap(std::vector<std::string> vsFileLines);
-    float getStat(std::map<std::string, std::string> mStats, std::string sStat);
+    // File Reading
+    vector<string> readFileLines();
 
-    int getInfoPos(std::vector<std::string> vsFileLines);
-    std::map<std::string, std::map<std::string, int>> getLevelInfoMap(std::vector<std::string> vsFileLines);
-    std::map<int, std::vector<std::string>> getLevelWavesMap(std::vector<std::string> vsFileLines);
+    // Statistics Methods
+    map<string, string> getStatsMap(vector<string> vsFileLines);
+    float getStat(map<string, string> mStats, string sStat);
+
+    // Level Methods
+    int getInfoPos(vector<string> vsFileLines);
+    map<string, map<string, int>> getLevelInfoMap(vector<string> vsFileLines);
+    map<int, vector<string>> getLevelWavesMap(vector<string> vsFileLines);
+
+    // Destructor
+    ~FileManager();
 };
 
 #endif 

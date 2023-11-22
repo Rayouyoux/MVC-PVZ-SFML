@@ -4,12 +4,16 @@
 #include <vector>
 #include <map>
 #include "FileManager.h"
+#include "Zombie.h"
+#include "GameManager.h"
+
+using namespace std;
 
 class LevelManager {
 
 public :
-	std::map<std::string, std::map<std::string, int>> m_mLevelInfo;
-	std::map<int, std::vector<std::string>> m_mLevelWaves;
+	map<string, map<string, int>> m_mLevelInfo;
+	map<int, vector<string>> m_mLevelWaves;
 
 	LevelManager(int iLevel);
 
