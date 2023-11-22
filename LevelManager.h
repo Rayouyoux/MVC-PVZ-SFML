@@ -17,6 +17,6 @@ public :
 
 	LevelManager(int iLevel);
 
-	void createLevel();
+	void createLevel(vector<Zombie*> vsZombies);
 };
 

@@ -11,7 +11,7 @@ LevelManager::LevelManager(int iLevel) {
 	m_mLevelWaves = oLevel.getLevelWavesMap(vsFileLines);
 }
 
-void LevelManager::createLevel() {
+void LevelManager::createLevel(vector<Zombie*> vsZombies) {
 	float fSpawnPosX = 1920;
 	float fSpawnPosY = 200;
     for (const auto& pair : m_mLevelWaves) {
@@ -28,7 +28,9 @@ void LevelManager::createLevel() {
 							mZombieInfos.insert(innerMap.second.begin(), innerMap.second.end());
 						}
 					}
-					
+					Zombie oZombie;
+					oZombie.setStats(mZombieInfos["SPD"], mZombieInfos["HP"], mZombieInfos["HP"], mZombieInfos["DMG"]);
+					vsZombies.push_back(&oZombie);
 				}
 			}
 		}
