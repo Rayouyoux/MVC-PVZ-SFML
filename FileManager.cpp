@@ -2,34 +2,32 @@
 #include <iostream>
 #include <fstream>
 
-using namespace std;
+FileManager::FileManager(const std::string& sFilePath) : m_sFilePath(sFilePath) {}
 
-FileManager::FileManager(const string& sFilename) : m_sFileName(sFilename) {}
+std::vector<std::string> FileManager::readFileLines() {
+    std::vector<std::string> sLines;
+    std::ifstream fFile(m_sFilePath);
 
-vector<string> FileManager::readFileLines() {
-    vector<string> lines;
-    ifstream file(m_sFileName);
-
-    if (file.is_open()) {
-        string line;
-        while (getline(file, line)) {
-            lines.push_back(line);
+    if (fFile.is_open()) {
+        std::string sLine;
+        while (std::getline(fFile, sLine)) {
+            sLines.push_back(sLine);
         }
-        file.close();
+        fFile.close();
     }
     else {
-        cerr << "Unable to open file: " << m_sFileName << endl;
+        std::cerr << "Unable to open file: " << m_sFilePath << std::endl;
     }
 
-    return lines;
+    return sLines;
 }
 
-map<string, string> FileManager::getStatsMap(vector<string> vsFileLines) {
-    map<string, string> mStats;
+std::map<std::string, std::string> FileManager::getStatsMap(std::vector<std::string> vsFileLines) {
+    std::map<std::string, std::string> mStats;
 
     for (int i = 0; i < vsFileLines.size(); i++) {
-        size_t pos = vsFileLines[i].find(':');
-        mStats[vsFileLines[i].substr(0, pos)] = vsFileLines[i].substr(pos + 1);
+        size_t iPos = vsFileLines[i].find(':');
+        mStats[vsFileLines[i].substr(0, iPos)] = vsFileLines[i].substr(iPos + 1);
     }
 
     return mStats;
@@ -80,7 +78,7 @@ std::map<std::string, std::map<std::string, int>> FileManager::getLevelInfoMap(s
     return mLevelInformations;
 }
 
-std::map<int, std::vector<std::string>> FileManager::getWavesMap(std::vector<std::string> vsFileLines) {
+std::map<int, std::vector<std::string>> FileManager::getLevelWavesMap(std::vector<std::string> vsFileLines) {
     int iIndex = getInfoPos(vsFileLines);
     std::map<int, std::vector<std::string>> mLevelWaves;
 
@@ -99,8 +97,4 @@ std::map<int, std::vector<std::string>> FileManager::getWavesMap(std::vector<std
     }
 
     return mLevelWaves;
-}
-
-void FileManager::createLevel(std::map<std::string, std::string> mLevelInfos, std::map<std::string, std::vector<std::string>> mLevelWaves) {
-
 }
