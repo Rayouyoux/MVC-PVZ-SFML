@@ -31,3 +31,6 @@ int		Plante::GetHPmax(){
 bool	Plante::GetPowerUpStatus(){
 	return m_powerAvailable;
 }
+int Plante::GetId() {
+	return m_id;
+}

@@ -1,5 +1,7 @@
 #pragma once
 #include "Plante.h"
+#include <vector>
+#include "Bullet.h"
 
 class Pistopois : public Plante
 {
@@ -17,6 +19,8 @@ public:
 	float GetRate();
 	
 	float GetDamage();
+
+	void Shoot(std::vector<Bullet*>* bullets);
 
 };
 

@@ -19,6 +19,8 @@
 */
 
 GameManager::GameManager(){
+
+
 	isDone = false;
 	hasWon = false;
 	hasLost = false;
@@ -66,6 +68,7 @@ void GameManager::PlacePlante() {
 	Pistopois* oPistopois = new Pistopois(1);
 
 	plantes.push_back(oPistopois);
+	pistopois.push_back(oPistopois);
 
 	while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 		oPistopois->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
@@ -75,6 +78,26 @@ void GameManager::PlacePlante() {
 		plantes.pop_back();
 	else
 		money -= 100;
+}
+
+void GameManager::PistopoisShoot() {
+	if (!pistopois.empty()) {
+		for (int i = 0; i < pistopois.size(); i++) {
+			pistopois[i]->Shoot(&bullets);
+		}
+	}
+}
+
+void GameManager::DeleteBullet() {
+	if (!bullets.empty()) {
+		for (int i = 0; i < bullets.size(); i++) {
+			if (bullets[i]->GetPosistion().x > 1920) {
+				delete bullets[i];
+				bullets.erase(bullets.begin() + i);
+				std::cout << "papagnan" << std::endl;
+			}
+		}
+	}
 }
 
 /*
@@ -89,6 +112,13 @@ void		GameManager::RenderGame() {
 	if (!plantes.empty()) {
 		for (int i = 0; i < plantes.size(); ++i)
 			window->DrawObject(plantes.at(i));
+	}
+	// à bouger dans le moove zombie
+	if (!bullets.empty()) {
+		for (int i = 0; i < bullets.size(); i++) {
+			bullets[i]->Move(fDeltaTime);
+			window->DrawObject(bullets.at(i));
+		}
 	}
 	if (!zombies.empty()) {
 		for (int i = 0; i < zombies.size(); ++i) {
@@ -148,7 +178,6 @@ void GameManager::HandleEvents() {
 		while (window->w_window->pollEvent(event))
 		{
 			SpawnZombie();
-			LimitFps();
 			/*move();*/
 			sf::Vector2i localposition = sf::Mouse::getPosition(*window->w_window);
 			if (event.type == Event::Closed)
@@ -159,17 +188,23 @@ void GameManager::HandleEvents() {
 				if (money >= 100)
 					PlacePlante();
 			}
-			RenderGame();
+			
+			
 			
 		}
-		
+		LimitFps();
+		DeleteBullet();
+		RenderGame();
 	}
 }
 
 
 void GameManager::LimitFps() {
-	sf::Clock oClock;
-	fDeltaTime = oClock.restart().asSeconds();
+	fDeltaTime = clock.restart().asSeconds();
+	if (pistoClock.getElapsedTime().asSeconds() >= 2) {
+		fpistoDeltaTime = pistoClock.restart().asSeconds();
+		PistopoisShoot();
+	}
 	//if (g_deltaTime < g_fpsLimit) {
 	//	sleep(seconds(g_fpsLimit - g_deltaTime));
 	//	g_deltaTime += g_fpsLimit - g_deltaTime;

@@ -5,6 +5,7 @@
 Pistopois::Pistopois(int id) : Plante(id) {
 	m_rate = 10.f;
 	m_damage = 10.f;
+	SetSize(100, 100);
 	sf::Texture* m_texture = new sf::Texture();
 	if (!m_texture->loadFromFile("rsrc/img/sprite/plantes/Pistopois.png")) {
 		std::cout << "failed to load texture" << std::endl;
@@ -32,3 +33,6 @@ float Pistopois::GetDamage() {
 	return m_damage;
 }
 
+void Pistopois::Shoot(std::vector<Bullet*>* bullets) {
+	bullets->push_back(new Bullet(m_position.x + GetSize().x/2, m_position.y - 25));
+}

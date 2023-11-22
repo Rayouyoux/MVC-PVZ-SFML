@@ -3,6 +3,8 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include "Bullet.h"
+#include "Pistopois.h"
 
 class GameWindow;
 class Zombie;
@@ -15,10 +17,15 @@ private:
 	
 	// Main Attributes
 
+	sf::Clock	clock;
+	sf::Clock	pistoClock;
+
 	bool		isDone;
 	bool		hasWon;
 	bool		hasLost;
 
+
+	float		fpistoDeltaTime;
 	float		fDeltaTime;
 	// Window Attributes
 
@@ -30,9 +37,10 @@ private:
 	// Objects Attributes
 
 	int						money;
-	//std::vector<Ball*>	balls;
+	std::vector<Bullet*>	bullets;
 	std::vector<Zombie*>	zombies;
 	std::vector<Plante*>	plantes;
+	std::vector<Pistopois*> pistopois;
 	
 
 
@@ -57,6 +65,9 @@ private:
 
 	void		RenderGame();
 
-	void LimitFps();
+	void        PistopoisShoot();
+	void		DeleteBullet();
+
+	void		LimitFps();
 };
 
