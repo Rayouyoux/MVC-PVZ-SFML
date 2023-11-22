@@ -3,7 +3,7 @@
 #include <iostream>
 
 Zombie::Zombie() : GameObject() {
-	m_Speed = 30;
+	m_Speed = 3;
 	m_Hp = 50;
 	m_HpMax = 50;
 	m_Damage = 50;
@@ -19,6 +19,24 @@ Zombie::Zombie() : GameObject() {
 	SetSize(m_texture->getSize().x, m_texture->getSize().y);
 	m_sprite->setTexture(*m_texture);
 	m_sprite->setOrigin(GetSize().x / 2, GetSize().y / 2);
+}
+
+int		Zombie::GetHp() {
+	return m_Hp;
+}
+
+void Zombie::DecreaseLife(int value) {
+	m_Hp -= value;
+}
+
+bool Zombie::CheckCollision(GameObject* object) {
+	if (GetPosition().x - GetSize().x / 2 <= object->GetPosition().x + object->GetSize().x / 2 and \
+		object->GetPosition().y >= GetPosition().y - GetSize().y / 2 and \
+		object->GetPosition().y <= GetPosition().y + GetSize().y / 2) {
+		DecreaseLife(10);
+		return true;
+	}
+	return false;
 }
 
 void Zombie::move(float fDeltaTime) {

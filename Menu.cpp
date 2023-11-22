@@ -5,7 +5,7 @@
 
 #include "GameWindow.h"
 
-Menu::Menu(GameWindow *window, Music *music) {
+Menu::Menu(GameWindow* window, Music* music) {
 	m_loop = true;
 
 	m_window = window;
@@ -79,8 +79,13 @@ void Menu::Options() {
 			if (event.type == Event::Closed)
 				m_window->Close();
 			if (Mouse::isButtonPressed(Mouse::Button::Left) and m_window->w_window->hasFocus() and OptionMuteButton())
-				m_music->setVolume(0.0f);
-			if (Mouse::isButtonPressed(Mouse::Button::Left) and m_window->w_window->hasFocus() and OptionMenuButton()) 
+			{
+				if (m_music->getVolume() != 0)
+					m_music->setVolume(0.0f);
+				else
+					m_music->setVolume(10.0f);
+			}
+			if (Mouse::isButtonPressed(Mouse::Button::Left) and m_window->w_window->hasFocus() and OptionMenuButton())
 				loop = false;
 			if (Mouse::isButtonPressed(Mouse::Button::Left) and m_window->w_window->hasFocus() and OptionExitButton())
 				m_window->Close();
@@ -131,7 +136,7 @@ bool Menu::StartButton() {
 */
 
 void	Menu::Init() {
-	sf::Texture	*menuTexture = new sf::Texture();
+	sf::Texture* menuTexture = new sf::Texture();
 	m_background = new sf::Sprite();
 
 	if (!menuTexture->loadFromFile("rsrc/img/menu/background.png")) {
@@ -156,7 +161,7 @@ void	Menu::Init() {
 	m_music->setLoop(true);
 }
 
-void	Menu::Start(){
+void	Menu::Start() {
 	Event	event;
 
 	Init();
@@ -186,7 +191,7 @@ void	Menu::Display() {
 	m_window->w_window->display();
 }
 
-Menu::~Menu(){
+Menu::~Menu() {
 	m_music->stop();
 	delete m_music;
 }

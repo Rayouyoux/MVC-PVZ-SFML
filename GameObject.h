@@ -1,7 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 
-namespace sf{
+namespace sf {
 	class Sprite;
 }
 class GameObject
@@ -20,7 +20,7 @@ public:
 
 	void SetSize(float w, float h);
 
-	sf::Vector2f GetPosistion();
+	sf::Vector2f GetPosition();
 
 	sf::Vector2f GetSize();
 };

@@ -5,7 +5,7 @@
 #include "GameWindow.h"
 
 
-Plante::Plante (int id) : GameObject(){
+Plante::Plante(int id) : GameObject() {
 
 	m_id = id;
 	m_hp = 50;
@@ -13,22 +13,22 @@ Plante::Plante (int id) : GameObject(){
 	m_powerAvailable = false;
 }
 
-bool	Plante::CanBePlaced(GameWindow *window) {
-	if (GetPosistion().x < 0.2 * window->GetWidth() or \
-		GetPosistion().x > 0.8 * window->GetWidth() or \
-		GetPosistion().y < 0.1 * window->GetHeight() or \
-		GetPosistion().y > 0.9 * window->GetHeight())
+bool	Plante::CanBePlaced(GameWindow* window) {
+	if (GetPosition().x < 0.2 * window->GetWidth() or \
+		GetPosition().x > 0.8 * window->GetWidth() or \
+		GetPosition().y < 0.1 * window->GetHeight() or \
+		GetPosition().y > 0.9 * window->GetHeight())
 		return false;
 	return true;
 }
 
-int		Plante::GetHP(){
+int		Plante::GetHP() {
 	return m_hp;
 }
-int		Plante::GetHPmax(){
+int		Plante::GetHPmax() {
 	return m_hpMax;
 }
-bool	Plante::GetPowerUpStatus(){
+bool	Plante::GetPowerUpStatus() {
 	return m_powerAvailable;
 }
 int Plante::GetId() {

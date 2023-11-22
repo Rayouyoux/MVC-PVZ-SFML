@@ -21,8 +21,8 @@ void GameObject::SetSize(float w, float h) {
 	m_size.y = (h);
 }
 
-sf::Vector2f GameObject::GetPosistion() {
-	sf::Vector2f pos(m_position.x,m_position.y);
+sf::Vector2f GameObject::GetPosition() {
+	sf::Vector2f pos(m_position.x, m_position.y);
 	return pos;
 }
 

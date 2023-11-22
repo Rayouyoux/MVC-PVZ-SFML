@@ -12,7 +12,13 @@ private:
 	std::vector<float>	m_vDirection;
 
 public:
+
 	Zombie();
+
+	int		GetHp();
+	void	DecreaseLife(int value);
+	bool	CheckCollision(GameObject* object);
+
 	void	move(float fDeltaTime);
 };
 

@@ -8,7 +8,6 @@ class Pistopois : public Plante
 private:
 	float m_rate;
 	float m_damage;
-
 public:
 	
 	Pistopois(int id);

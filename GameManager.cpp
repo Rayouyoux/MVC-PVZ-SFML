@@ -20,7 +20,7 @@
 ---------------------------------------------------------------------------------
 */
 
-GameManager::GameManager(){
+GameManager::GameManager() {
 
 
 	isDone = false;
@@ -30,7 +30,7 @@ GameManager::GameManager(){
 	money = 1000;
 
 	fDeltaTime = 0;
-
+	fpistoDeltaTime = 0;
 
 
 	window = new GameWindow();
@@ -76,7 +76,7 @@ void GameManager::SpawnZombie(float x, float y) {
 	Zombie* oZombie = new Zombie();
 	oZombie->SetPosition(x, y);
 	zombies.push_back(oZombie);
-	
+
 }
 
 void GameManager::MoveZombies() {
@@ -114,7 +114,7 @@ void GameManager::PistopoisShoot() {
 void GameManager::DeleteBullet() {
 	if (!bullets.empty()) {
 		for (int i = 0; i < bullets.size(); i++) {
-			if (bullets[i]->GetPosistion().x > window->GetWidth()) {
+			if (bullets[i]->GetPosition().x > window->GetWidth()) {
 				delete bullets[i];
 				bullets.erase(bullets.begin() + i);
 			}
@@ -135,7 +135,7 @@ void		GameManager::RenderGame() {
 		for (int i = 0; i < plantes.size(); ++i)
 			window->DrawObject(plantes.at(i));
 	}
-	// Ã  bouger dans le moove zombie
+	// à bouger dans le moove zombie
 	if (!bullets.empty()) {
 		for (int i = 0; i < bullets.size(); i++) {
 			bullets[i]->Move(fDeltaTime);
@@ -167,7 +167,7 @@ void		GameManager::Start() {
 	Menu	menu(window, music);
 
 	menu.Start();
-	
+
 	music->play();
 	music->setVolume(menu.GetVolume());
 	sf::sleep(sf::milliseconds(200));
@@ -188,7 +188,7 @@ GameManager::~GameManager() {
 
 void GameManager::Defeat() {
 	for (int i = 0; i < zombies.size(); ++i) {
-		if (zombies[i]->GetPosistion().x < 0.2 * window->GetWidth()) {
+		if (zombies[i]->GetPosition().x < 0.2 * window->GetWidth()) {
 			/*window->Close();*/
 		}
 	}
@@ -208,49 +208,68 @@ bool GameManager::IsOnPlay() {
 	return false;
 }
 
+bool GameManager::IsOnSun(sf::Vector2i localposition) {
+	bool gotSun;
+
+	gotSun = false;
+	for (int i = 0; i < suns.size(); i++) {
+		if (((suns[i]->GetPosition().x - suns[i]->GetSize().x / 2) < localposition.x && (suns[i]->GetPosition().x + suns[i]->GetSize().x / 2) > localposition.x)
+			&& ((suns[i]->GetPosition().y - suns[i]->GetSize().y / 2) < localposition.y && (suns[i]->GetPosition().y + suns[i]->GetSize().y / 2) > localposition.y)) {
+			money += suns[i]->m_value;
+			suns.erase(suns.begin() + i);
+			gotSun = true;
+		}
+	}
+	return gotSun;
+}
+
 void GameManager::HandleEvents() {
-	Event	event; 
-	sf::Clock oClock;
+	Event		event;
+	sf::Clock	oClock;
+
 	srand(time(NULL));
-	SpawnZombie(1980,800);
+	SpawnZombie(1980, 800);
 	while (true) {
 
 		while (window->w_window->pollEvent(event))
 		{
-			
+
 			/*move();*/
 			sf::Vector2i localposition = sf::Mouse::getPosition(*window->w_window);
 			if (event.type == Event::Closed)
 				window->Close();
 			if (Mouse::isButtonPressed(Mouse::Button::Left) and IsOnPlay())
 				std::cout << "PLAY" << std::endl;
+			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus() and IsOnSun(localposition));
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
-				for (int i = 0; i < suns.size(); i++) {
-					if (((suns[i]->GetPosistion().x - suns[i]->GetSize().x / 2) < localposition.x && (suns[i]->GetPosistion().x + suns[i]->GetSize().x / 2) > localposition.x)
-						&& ((suns[i]->GetPosistion().y - suns[i]->GetSize().y / 2) < localposition.y && (suns[i]->GetPosistion().y + suns[i]->GetSize().y/2) > localposition.y)) {
-						money += suns[i]->m_value;
-						suns.erase(suns.begin() + i);
-						
-					}
-				}
 				if (money >= 100)
 					PlacePlante();
 			}
-			RenderGame();
-			
-			
-			
 		}
-
 		LimitFps();
+		CheckColls();
 		MoveZombies();
 		Defeat();
 		DeleteBullet();
 		RenderGame();
-		
 	}
 }
 
+void	GameManager::CheckColls() {
+	for (int i = 0; i < bullets.size(); ++i) {
+		for (int j = 0; j < zombies.size(); ++j)
+		{
+			if (zombies.at(j)->CheckCollision(bullets.at(i))) {
+				delete bullets[i];
+				bullets.erase(bullets.begin() + i);
+				if (zombies.at(j)->GetHp() <= 0) {
+					delete zombies[j];
+					zombies.erase(zombies.begin() + j);
+				}
+			}
+		}
+	}
+}
 
 void	GameManager::GenerateWave() {
 	float	x = 1920;

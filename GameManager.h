@@ -15,7 +15,7 @@ class Hud;
 class GameManager
 {
 private:
-	
+
 	// Main Attributes
 
 	sf::Clock	clock;
@@ -30,10 +30,10 @@ private:
 	float		fDeltaTime;
 	// Window Attributes
 
-	GameWindow					*window;
-	Hud							*hud;
-	sf::Sprite					*background;
-	sf::Music					*music;
+	GameWindow* window;
+	Hud* hud;
+	sf::Sprite* background;
+	sf::Music* music;
 
 	// Objects Attributes
 
@@ -43,9 +43,9 @@ private:
 	std::vector<Zombie*>	zombies;
 	std::vector<Plante*>	plantes;
 	std::vector<Pistopois*> pistopois;
-	
 
-	
+
+
 	std::vector<sf::String*>	wave;
 
 
@@ -65,8 +65,10 @@ private:
 	void		PlacePlante();
 	void		SpawnSun();
 	void		SpawnZombie(float x, float y);
+	void		CheckColls();
 
 	void		HandleEvents();
+	bool		IsOnSun(sf::Vector2i localposition);
 	bool		IsOnPlay();
 
 	void		RenderGame();
