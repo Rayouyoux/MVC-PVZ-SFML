@@ -26,7 +26,7 @@ public:
 
     // Level Methods
     int getInfoPos(vector<string> vsFileLines);
-    map<string, map<string, float>> getLevelInfoMap(vector<string> vsFileLines);
+    map<string, map<string, int>> getLevelInfoMap(vector<string> vsFileLines);
     map<int, vector<string>> getLevelWavesMap(vector<string> vsFileLines);
 
     // Destructor

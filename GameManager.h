@@ -33,7 +33,7 @@ private:
 	GameWindow* window;
 	Hud* hud;
 	sf::Sprite* background;
-	sf::Music* music;
+	sf::Music*	music;
 
 	// Objects Attributes
 
@@ -72,7 +72,12 @@ private:
 	bool		IsOnPlay();
 
 	void		RenderGame();
-	void		Defeat();
+	void		CheckDefeat();
+	void		CheckVictory();
+
+	void		LoseScreen();
+	void		WinScreen();
+	void		Credits();
 
 	void		MoveZombies();
 

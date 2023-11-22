@@ -91,16 +91,19 @@ void GameManager::PlacePlante() {
 	Pistopois* oPistopois = new Pistopois(1);
 
 	plantes.push_back(oPistopois);
-	pistopois.push_back(oPistopois);
 
 	while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 		oPistopois->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
 		RenderGame();
 	}
-	if (oPistopois->CanBePlaced(window) == false)
+	if (oPistopois->CanBePlaced(window) == false) {
 		plantes.pop_back();
+	}
 	else
+	{
+		pistopois.push_back(oPistopois);
 		money -= 100;
+	}
 }
 
 void GameManager::PistopoisShoot() {
@@ -186,11 +189,20 @@ GameManager::~GameManager() {
 
 
 
-void GameManager::Defeat() {
+void GameManager::CheckDefeat() {
 	for (int i = 0; i < zombies.size(); ++i) {
 		if (zombies[i]->GetPosition().x < 0.2 * window->GetWidth()) {
-			/*window->Close();*/
+			hasLost = true;
+			isDone = true;
 		}
+	}
+}
+
+void GameManager::CheckVictory() {
+	
+	if (zombies.empty()) {
+		hasWon = true;
+		isDone = true;
 	}
 }
 /*
@@ -223,13 +235,133 @@ bool GameManager::IsOnSun(sf::Vector2i localposition) {
 	return gotSun;
 }
 
+void GameManager::LoseScreen() {
+	sf::Texture loseTexture;
+	sf::Sprite	lose;
+	Event		event;
+	bool		loop = true;
+
+	fDeltaTime = clock.restart().asSeconds();
+
+	if (!loseTexture.loadFromFile("rsrc/img/losescreen/background.png")) {
+		std::cout << "Error loading lose background" << std::endl;
+		exit(1);
+	}
+	lose.setTexture(loseTexture);
+	window->w_window->draw(lose);
+	window->Display();
+
+	if (!music->openFromFile("rsrc/music/lose/lose.ogg"))
+	{
+		std::cout << "Error loading lose.ogg" << std::endl;
+		exit(1);
+	}
+	music->play();
+
+	while (loop and clock.getElapsedTime().asSeconds() <= 10)
+	{
+		while (window->w_window->pollEvent(event))
+		{
+			if (event.type == sf::Event::KeyPressed)
+				if (event.key.scancode == sf::Keyboard::Scan::Escape)
+					loop = false;
+			if (event.type == Event::Closed)
+				exit(1);
+		}
+	}
+	window->Clear();
+	music->stop();
+}
+
+void GameManager::WinScreen() {
+	sf::Texture winTexture;
+	sf::Sprite	win;
+	Event		event;
+	bool		loop = true;
+
+	fDeltaTime = clock.restart().asSeconds();
+
+	if (!winTexture.loadFromFile("rsrc/img/winscreen/background.png")) {
+		std::cout << "Error loading win background" << std::endl;
+		exit(1);
+	}
+	win.setTexture(winTexture);
+	window->w_window->draw(win);
+	window->Display();
+
+	if (!music->openFromFile("rsrc/music/win/win.ogg"))
+	{
+		std::cout << "Error loading win.ogg" << std::endl;
+		exit(1);
+	}
+	music->play();
+
+	while (loop and clock.getElapsedTime().asSeconds() <= 10)
+	{
+		while (window->w_window->pollEvent(event))
+		{
+			if (event.type == sf::Event::KeyPressed)
+				if (event.key.scancode == sf::Keyboard::Scan::Escape)
+					loop = false;
+			if (event.type == Event::Closed)
+				exit(1);
+		}
+	}
+	window->Clear();
+	music->stop();
+}
+
+void GameManager::Credits() {
+	sf::Texture creditsTexture;
+	sf::Sprite	credits;
+	Event		event;
+	bool		loop = true;
+
+	fDeltaTime = clock.restart().asSeconds();
+
+	if (!creditsTexture.loadFromFile("rsrc/img/credits/background.png")) {
+		std::cout << "Error loading credits background" << std::endl;
+		exit(1);
+	}
+	credits.setTexture(creditsTexture);
+	credits.setPosition(0, 0);
+	window->w_window->draw(credits);
+	window->Display();
+
+	if (!music->openFromFile("rsrc/music/credits/credits.ogg"))
+	{
+		std::cout << "Error loading win.ogg" << std::endl;
+		exit(1);
+	}
+	music->play();
+
+	while (loop)
+	{
+		fDeltaTime = clock.restart().asSeconds();
+		window->Clear();
+		while (window->w_window->pollEvent(event))
+		{
+			if (event.type == sf::Event::KeyPressed)
+				if (event.key.scancode == sf::Keyboard::Scan::Escape)
+					loop = false;
+			if (event.type == Event::Closed)
+				exit(1);
+		}
+		credits.setPosition(0, credits.getPosition().y - 20 * fDeltaTime);
+		window->w_window->draw(credits);
+		window->Display();
+	}
+	window->Clear();
+	music->stop();
+}
+
 void GameManager::HandleEvents() {
 	Event		event;
 	sf::Clock	oClock;
 
 	srand(time(NULL));
 	SpawnZombie(1980, 800);
-	while (true) {
+	while (!isDone) {
 
 		while (window->w_window->pollEvent(event))
 		{
@@ -249,10 +381,19 @@ void GameManager::HandleEvents() {
 		LimitFps();
 		CheckColls();
 		MoveZombies();
-		Defeat();
+		CheckDefeat();
+		CheckVictory();
 		DeleteBullet();
 		RenderGame();
 	}
+	window->Clear();
+	music->stop();
+	if (hasLost)
+		LoseScreen();
+	else if (hasWon)
+		WinScreen();
+	Credits();
+
 }
 
 void	GameManager::CheckColls() {
@@ -305,4 +446,7 @@ void GameManager::LimitFps() {
 	//	sleep(seconds(g_fpsLimit - g_deltaTime));
 	//	g_deltaTime += g_fpsLimit - g_deltaTime;
 	//}
+
 }
+
+
