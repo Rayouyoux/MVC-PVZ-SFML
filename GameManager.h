@@ -9,6 +9,7 @@
 class GameWindow;
 class Zombie;
 class Plante;
+class Sun;
 class Hud;
 
 class GameManager
@@ -38,6 +39,7 @@ private:
 
 	int						money;
 	std::vector<Bullet*>	bullets;
+	std::vector<Sun*>		suns;
 	std::vector<Zombie*>	zombies;
 	std::vector<Plante*>	plantes;
 	std::vector<Pistopois*> pistopois;
@@ -61,6 +63,7 @@ private:
 
 	void		GenerateWave();
 	void		PlacePlante();
+	void		SpawnSun();
 	void		SpawnZombie(float x, float y);
 
 	void		HandleEvents();

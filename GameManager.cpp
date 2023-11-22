@@ -1,6 +1,7 @@
 #include "GameManager.h"
 
 #include <iostream>
+#include "time.h"
 #include <SFML/System/Sleep.hpp>
 #include <SFML/Graphics.hpp>
 #include <vector>
@@ -11,6 +12,7 @@
 
 #include "Pistopois.h"
 #include "Zombie.h"
+#include "Sun.h"
 
 /*
 ---------------------------------------------------------------------------------
@@ -61,6 +63,15 @@ GameManager::GameManager(){
 |					Here are all the objects methods							|
 ---------------------------------------------------------------------------------
 */
+void GameManager::SpawnSun() {
+
+	Sun* oSun = new Sun();
+	int xPos = (int)oSun->GetSize().x + (rand() % (int(window->GetWidth() - oSun->GetSize().x)));
+	int y = -10;
+	oSun->SetPosition(xPos, y);
+	suns.push_back(oSun);
+}
+
 void GameManager::SpawnZombie(float x, float y) {
 	Zombie* oZombie = new Zombie();
 	oZombie->SetPosition(x, y);
@@ -103,10 +114,9 @@ void GameManager::PistopoisShoot() {
 void GameManager::DeleteBullet() {
 	if (!bullets.empty()) {
 		for (int i = 0; i < bullets.size(); i++) {
-			if (bullets[i]->GetPosistion().x > 1920) {
+			if (bullets[i]->GetPosistion().x > window->GetWidth()) {
 				delete bullets[i];
 				bullets.erase(bullets.begin() + i);
-				std::cout << "papagnan" << std::endl;
 			}
 		}
 	}
@@ -135,6 +145,12 @@ void		GameManager::RenderGame() {
 	if (!zombies.empty()) {
 		for (int i = 0; i < zombies.size(); ++i) {
 			window->DrawObject(zombies.at(i));
+		}
+	}
+	if (!suns.empty()) {
+		for (int i = 0; i < suns.size(); i++) {
+			suns[i]->Move(fDeltaTime);
+			window->DrawObject(suns.at(i));
 		}
 	}
 	hud->DrawHud(money, 50);
@@ -173,7 +189,7 @@ GameManager::~GameManager() {
 void GameManager::Defeat() {
 	for (int i = 0; i < zombies.size(); ++i) {
 		if (zombies[i]->GetPosistion().x < 0.2 * window->GetWidth()) {
-			window->Close();
+			/*window->Close();*/
 		}
 	}
 }
@@ -195,7 +211,7 @@ bool GameManager::IsOnPlay() {
 void GameManager::HandleEvents() {
 	Event	event; 
 	sf::Clock oClock;
-
+	srand(time(NULL));
 	SpawnZombie(1980,800);
 	while (true) {
 
@@ -209,7 +225,13 @@ void GameManager::HandleEvents() {
 			if (Mouse::isButtonPressed(Mouse::Button::Left) and IsOnPlay())
 				std::cout << "PLAY" << std::endl;
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
-				
+				for (int i = 0; i < suns.size(); i++) {
+					if (((suns[i]->GetPosistion().x - suns[i]->GetSize().x / 2) < localposition.x && (suns[i]->GetPosistion().x + suns[i]->GetSize().x / 2) > localposition.x)
+						&& ((suns[i]->GetPosistion().y - suns[i]->GetSize().y / 2) < localposition.y && (suns[i]->GetPosistion().y + suns[i]->GetSize().y/2) > localposition.y)) {
+						suns.erase(suns.begin() + i);
+						money += 20;
+					}
+				}
 				if (money >= 100)
 					PlacePlante();
 			}
@@ -256,6 +278,7 @@ void GameManager::LimitFps() {
 	fDeltaTime = clock.restart().asSeconds();
 	if (pistoClock.getElapsedTime().asSeconds() >= 2) {
 		fpistoDeltaTime = pistoClock.restart().asSeconds();
+		SpawnSun();
 		PistopoisShoot();
 	}
 	//if (g_deltaTime < g_fpsLimit) {
