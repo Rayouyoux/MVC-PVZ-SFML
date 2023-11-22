@@ -13,17 +13,22 @@ LevelManager::LevelManager(int iLevel) {
 
 void LevelManager::createLevel() {
 	float fSpawnPosX = 1920;
-	float fSpawnPosY = 100;
+	float fSpawnPosY = 200;
     for (const auto& pair : m_mLevelWaves) {
         const vector<string>& vsWaveInfos = pair.second;
 		for (int i = 0; i < vsWaveInfos.size(); i++) {
 			for (int j = 0; j < 5; j++) {
 				if (vsWaveInfos[j][i] == '-') {
-					/*rien*/
+					fSpawnPosX += 60;
 				}
 				else {
-					/*check letter*/
-					/*Spawn zombie with level info*/
+					map<string, int> mZombieInfos;
+					for (const auto& innerMap : m_mLevelInfo) {
+						if (innerMap.first[0] == vsWaveInfos[j][i]) {
+							mZombieInfos.insert(innerMap.second.begin(), innerMap.second.end());
+						}
+					}
+					
 				}
 			}
 		}
