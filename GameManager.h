@@ -15,26 +15,29 @@ private:
 	
 	// Main Attributes
 
-	bool		isDone;
-	bool		hasWon;
-	bool		hasLost;
+	bool						isDone;
+	bool						hasWon;
+	bool						hasLost;
 
-	float		fDeltaTime;
+	float						fDeltaTime;
+
+	sf::Clock					oClock;
+
 	// Window Attributes
 
-	GameWindow	*window;
-	Hud			*hud;
-	sf::Sprite	*background;
-	sf::Music	*music;
+	GameWindow					*window;
+	Hud							*hud;
+	sf::Sprite					*background;
+	sf::Music					*music;
 
 	// Objects Attributes
 
-	int						money;
-	//std::vector<Ball*>	balls;
-	std::vector<Zombie*>	zombies;
-	std::vector<Plante*>	plantes;
+	int							money;
+	//std::vector<Ball*>		balls;
+	std::vector<Zombie*>		zombies;
+	std::vector<Plante*>		plantes;
 	
-
+	std::vector<sf::String*>	wave;
 
 
 public:
@@ -49,13 +52,17 @@ private:
 
 	// Main Methods
 
+	void		GenerateWave();
 	void		PlacePlante();
-	void		SpawnZombie();
+	void		SpawnZombie(float x, float y);
 
 	void		HandleEvents();
 	bool		IsOnPlay();
 
 	void		RenderGame();
+	void		Defeat();
+
+	void		MoveZombies();
 
 	void LimitFps();
 };

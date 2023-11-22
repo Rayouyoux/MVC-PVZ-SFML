@@ -27,6 +27,8 @@ GameManager::GameManager(){
 
 	fDeltaTime = 0;
 
+
+
 	window = new GameWindow();
 	sf::Texture* texture = new sf::Texture();
 	if (!texture->loadFromFile("rsrc/img/background.png")) {
@@ -49,6 +51,7 @@ GameManager::GameManager(){
 	}
 	music->setVolume(10.0f);
 	music->setLoop(true);
+
 }
 
 /*
@@ -56,10 +59,19 @@ GameManager::GameManager(){
 |					Here are all the objects methods							|
 ---------------------------------------------------------------------------------
 */
-void GameManager::SpawnZombie() {
+void GameManager::SpawnZombie(float x, float y) {
 	Zombie* oZombie = new Zombie();
-	oZombie->SetPosition(1020, 800);
+	oZombie->SetPosition(x, y);
 	zombies.push_back(oZombie);
+	
+}
+
+void GameManager::MoveZombies() {
+	if (!zombies.empty()) {
+		for (int i = 0; i < zombies.size(); ++i) {
+			zombies.at(i)->move(fDeltaTime);
+		}
+	}
 }
 
 void GameManager::PlacePlante() {
@@ -76,6 +88,7 @@ void GameManager::PlacePlante() {
 	else
 		money -= 100;
 }
+
 
 /*
 ---------------------------------------------------------------------------------
@@ -126,6 +139,19 @@ GameManager::~GameManager() {
 	delete music;
 }
 
+void GameManager::LimitFps() {
+	
+	fDeltaTime = oClock.restart().asSeconds();
+
+}
+
+void GameManager::Defeat() {
+	for (int i = 0; i < zombies.size(); ++i) {
+		if (zombies[i]->GetPosistion().x < 0.2 * window->GetWidth()) {
+			window->Close();
+		}
+	}
+}
 /*
 ---------------------------------------------------------------------------------
 |								A bouger										|
@@ -142,36 +168,58 @@ bool GameManager::IsOnPlay() {
 }
 
 void GameManager::HandleEvents() {
-	Event	event;
+	Event	event; 
+	sf::Clock oClock;
 
+	SpawnZombie(1980,800);
 	while (true) {
+
 		while (window->w_window->pollEvent(event))
 		{
-			SpawnZombie();
-			LimitFps();
-			/*move();*/
+			
 			sf::Vector2i localposition = sf::Mouse::getPosition(*window->w_window);
 			if (event.type == Event::Closed)
 				window->Close();
 			if (Mouse::isButtonPressed(Mouse::Button::Left) and IsOnPlay())
 				std::cout << "PLAY" << std::endl;
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
+				
 				if (money >= 100)
 					PlacePlante();
 			}
-			RenderGame();
+			
 			
 		}
+		
+		LimitFps();
+		MoveZombies();
+		Defeat();
+
+		RenderGame();
 		
 	}
 }
 
 
-void GameManager::LimitFps() {
-	sf::Clock oClock;
-	fDeltaTime = oClock.restart().asSeconds();
-	//if (g_deltaTime < g_fpsLimit) {
-	//	sleep(seconds(g_fpsLimit - g_deltaTime));
-	//	g_deltaTime += g_fpsLimit - g_deltaTime;
-	//}
+void	GameManager::GenerateWave() {
+	float	x = 1920;
+	float	y = 80;
+	int		sizeX = wave.at(0)->getSize();
+	int		sizeY = wave.size();
+
+	for (int i = 0; i < sizeY; ++i) {
+		for (int j = 0; j < sizeX; ++j) {
+			if (wave.at(i)[j] != '-') {
+				SpawnZombie(x, y);
+			}
+			x += (60);
+		}
+		x = 60;
+		y += 60;
+	}
+	if (zombies.empty())
+	{
+		std::cout << "Error Generating Terrain. Terrain must not be empty" << std::endl;
+		exit(1);
+	}
 }
