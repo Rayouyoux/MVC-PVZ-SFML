@@ -5,6 +5,7 @@
 #include <SFML/Audio.hpp>
 
 class GameWindow;
+class Zombie;
 class Plante;
 class Hud;
 
@@ -18,6 +19,7 @@ private:
 	bool		hasWon;
 	bool		hasLost;
 
+	float		fDeltaTime;
 	// Window Attributes
 
 	GameWindow	*window;
@@ -29,7 +31,7 @@ private:
 
 	int						money;
 	//std::vector<Ball*>	balls;
-	//std::vector<Zombie*>	zombies;
+	std::vector<Zombie*>	zombies;
 	std::vector<Plante*>	plantes;
 	
 
@@ -48,10 +50,13 @@ private:
 	// Main Methods
 
 	void		PlacePlante();
+	void		SpawnZombie();
 
 	void		HandleEvents();
 	bool		IsOnPlay();
 
 	void		RenderGame();
+
+	void LimitFps();
 };
 

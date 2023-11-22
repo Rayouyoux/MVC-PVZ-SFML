@@ -10,6 +10,7 @@
 #include "HUD.h"
 
 #include "Pistopois.h"
+#include "Zombie.h"
 
 /*
 ---------------------------------------------------------------------------------
@@ -23,6 +24,8 @@ GameManager::GameManager(){
 	hasLost = false;
 
 	money = 1000;
+
+	fDeltaTime = 0;
 
 	window = new GameWindow();
 	sf::Texture* texture = new sf::Texture();
@@ -53,7 +56,11 @@ GameManager::GameManager(){
 |					Here are all the objects methods							|
 ---------------------------------------------------------------------------------
 */
-
+void GameManager::SpawnZombie() {
+	Zombie* oZombie = new Zombie();
+	oZombie->SetPosition(1020, 800);
+	zombies.push_back(oZombie);
+}
 
 void GameManager::PlacePlante() {
 	Pistopois* oPistopois = new Pistopois(1);
@@ -82,6 +89,11 @@ void		GameManager::RenderGame() {
 	if (!plantes.empty()) {
 		for (int i = 0; i < plantes.size(); ++i)
 			window->DrawObject(plantes.at(i));
+	}
+	if (!zombies.empty()) {
+		for (int i = 0; i < zombies.size(); ++i) {
+			window->DrawObject(zombies.at(i));
+		}
 	}
 	hud->DrawHud(money, 50);
 	window->Display();
@@ -135,6 +147,9 @@ void GameManager::HandleEvents() {
 	while (true) {
 		while (window->w_window->pollEvent(event))
 		{
+			SpawnZombie();
+			LimitFps();
+			/*move();*/
 			sf::Vector2i localposition = sf::Mouse::getPosition(*window->w_window);
 			if (event.type == Event::Closed)
 				window->Close();
@@ -145,7 +160,18 @@ void GameManager::HandleEvents() {
 					PlacePlante();
 			}
 			RenderGame();
+			
 		}
 		
 	}
+}
+
+
+void GameManager::LimitFps() {
+	sf::Clock oClock;
+	fDeltaTime = oClock.restart().asSeconds();
+	//if (g_deltaTime < g_fpsLimit) {
+	//	sleep(seconds(g_fpsLimit - g_deltaTime));
+	//	g_deltaTime += g_fpsLimit - g_deltaTime;
+	//}
 }

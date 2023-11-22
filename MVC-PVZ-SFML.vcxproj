@@ -140,6 +140,7 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Pistopois.cpp" />
     <ClCompile Include="Plante.cpp" />
+    <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileManager.h" />
@@ -151,6 +152,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Pistopois.h" />
     <ClInclude Include="Plante.h" />
+    <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
