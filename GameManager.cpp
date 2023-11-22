@@ -201,8 +201,7 @@ void GameManager::HandleEvents() {
 
 		while (window->w_window->pollEvent(event))
 		{
-			SpawnZombie();
-			LimitFps();
+			
 			/*move();*/
 			sf::Vector2i localposition = sf::Mouse::getPosition(*window->w_window);
 			if (event.type == Event::Closed)
@@ -219,7 +218,7 @@ void GameManager::HandleEvents() {
 			
 			
 		}
-		
+
 		LimitFps();
 		MoveZombies();
 		Defeat();
@@ -251,6 +250,8 @@ void	GameManager::GenerateWave() {
 		std::cout << "Error Generating Terrain. Terrain must not be empty" << std::endl;
 		exit(1);
 	}
+}
+
 void GameManager::LimitFps() {
 	fDeltaTime = clock.restart().asSeconds();
 	if (pistoClock.getElapsedTime().asSeconds() >= 2) {
