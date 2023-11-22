@@ -54,7 +54,7 @@ int FileManager::getInfoPos(vector<string> vsFileLines) {
     return iIndex;
 }
 
-map<string, map<string, int>> FileManager::getLevelInfoMap(vector<string> vsFileLines) {
+map<string, map<string, float>> FileManager::getLevelInfoMap(vector<string> vsFileLines) {
     int iIndex = getInfoPos(vsFileLines);
     map<string, map < string, int>> mLevelInformations;
 
