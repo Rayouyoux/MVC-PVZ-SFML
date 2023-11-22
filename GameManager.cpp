@@ -19,6 +19,8 @@
 */
 
 GameManager::GameManager(){
+
+
 	isDone = false;
 	hasWon = false;
 	hasLost = false;
@@ -26,6 +28,8 @@ GameManager::GameManager(){
 	money = 1000;
 
 	fDeltaTime = 0;
+
+
 
 	window = new GameWindow();
 	sf::Texture* texture = new sf::Texture();
@@ -49,6 +53,7 @@ GameManager::GameManager(){
 	}
 	music->setVolume(10.0f);
 	music->setLoop(true);
+
 }
 
 /*
@@ -56,16 +61,26 @@ GameManager::GameManager(){
 |					Here are all the objects methods							|
 ---------------------------------------------------------------------------------
 */
-void GameManager::SpawnZombie() {
+void GameManager::SpawnZombie(float x, float y) {
 	Zombie* oZombie = new Zombie();
-	oZombie->SetPosition(1020, 800);
+	oZombie->SetPosition(x, y);
 	zombies.push_back(oZombie);
+	
+}
+
+void GameManager::MoveZombies() {
+	if (!zombies.empty()) {
+		for (int i = 0; i < zombies.size(); ++i) {
+			zombies.at(i)->move(fDeltaTime);
+		}
+	}
 }
 
 void GameManager::PlacePlante() {
 	Pistopois* oPistopois = new Pistopois(1);
 
 	plantes.push_back(oPistopois);
+	pistopois.push_back(oPistopois);
 
 	while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 		oPistopois->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
@@ -75,6 +90,26 @@ void GameManager::PlacePlante() {
 		plantes.pop_back();
 	else
 		money -= 100;
+}
+
+void GameManager::PistopoisShoot() {
+	if (!pistopois.empty()) {
+		for (int i = 0; i < pistopois.size(); i++) {
+			pistopois[i]->Shoot(&bullets);
+		}
+	}
+}
+
+void GameManager::DeleteBullet() {
+	if (!bullets.empty()) {
+		for (int i = 0; i < bullets.size(); i++) {
+			if (bullets[i]->GetPosistion().x > 1920) {
+				delete bullets[i];
+				bullets.erase(bullets.begin() + i);
+				std::cout << "papagnan" << std::endl;
+			}
+		}
+	}
 }
 
 /*
@@ -89,6 +124,13 @@ void		GameManager::RenderGame() {
 	if (!plantes.empty()) {
 		for (int i = 0; i < plantes.size(); ++i)
 			window->DrawObject(plantes.at(i));
+	}
+	// à bouger dans le moove zombie
+	if (!bullets.empty()) {
+		for (int i = 0; i < bullets.size(); i++) {
+			bullets[i]->Move(fDeltaTime);
+			window->DrawObject(bullets.at(i));
+		}
 	}
 	if (!zombies.empty()) {
 		for (int i = 0; i < zombies.size(); ++i) {
@@ -126,6 +168,15 @@ GameManager::~GameManager() {
 	delete music;
 }
 
+
+
+void GameManager::Defeat() {
+	for (int i = 0; i < zombies.size(); ++i) {
+		if (zombies[i]->GetPosistion().x < 0.2 * window->GetWidth()) {
+			window->Close();
+		}
+	}
+}
 /*
 ---------------------------------------------------------------------------------
 |								A bouger										|
@@ -142,9 +193,12 @@ bool GameManager::IsOnPlay() {
 }
 
 void GameManager::HandleEvents() {
-	Event	event;
+	Event	event; 
+	sf::Clock oClock;
 
+	SpawnZombie(1980,800);
 	while (true) {
+
 		while (window->w_window->pollEvent(event))
 		{
 			SpawnZombie();
@@ -156,20 +210,53 @@ void GameManager::HandleEvents() {
 			if (Mouse::isButtonPressed(Mouse::Button::Left) and IsOnPlay())
 				std::cout << "PLAY" << std::endl;
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
+				
 				if (money >= 100)
 					PlacePlante();
 			}
 			RenderGame();
 			
+			
+			
 		}
+		
+		LimitFps();
+		MoveZombies();
+		Defeat();
+		DeleteBullet();
+		RenderGame();
 		
 	}
 }
 
 
+void	GameManager::GenerateWave() {
+	float	x = 1920;
+	float	y = 80;
+	int		sizeX = wave.at(0)->getSize();
+	int		sizeY = wave.size();
+
+	for (int i = 0; i < sizeY; ++i) {
+		for (int j = 0; j < sizeX; ++j) {
+			if (wave.at(i)[j] != '-') {
+				SpawnZombie(x, y);
+			}
+			x += (60);
+		}
+		x = 60;
+		y += 60;
+	}
+	if (zombies.empty())
+	{
+		std::cout << "Error Generating Terrain. Terrain must not be empty" << std::endl;
+		exit(1);
+	}
 void GameManager::LimitFps() {
-	sf::Clock oClock;
-	fDeltaTime = oClock.restart().asSeconds();
+	fDeltaTime = clock.restart().asSeconds();
+	if (pistoClock.getElapsedTime().asSeconds() >= 2) {
+		fpistoDeltaTime = pistoClock.restart().asSeconds();
+		PistopoisShoot();
+	}
 	//if (g_deltaTime < g_fpsLimit) {
 	//	sleep(seconds(g_fpsLimit - g_deltaTime));
 	//	g_deltaTime += g_fpsLimit - g_deltaTime;

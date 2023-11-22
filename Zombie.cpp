@@ -3,7 +3,7 @@
 #include <iostream>
 
 Zombie::Zombie() : GameObject() {
-	m_Speed = 300;
+	m_Speed = 30;
 	m_Hp = 50;
 	m_HpMax = 50;
 	m_Damage = 50;

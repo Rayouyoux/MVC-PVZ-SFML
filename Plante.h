@@ -24,6 +24,7 @@ public:
 	int		GetHP();
 	int		GetHPmax();
 	bool	GetPowerUpStatus();
+	int    GetId();
 };
 
 
