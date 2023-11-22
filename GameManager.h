@@ -29,10 +29,10 @@ private:
 	float		fDeltaTime;
 	// Window Attributes
 
-	GameWindow	*window;
-	Hud			*hud;
-	sf::Sprite	*background;
-	sf::Music	*music;
+	GameWindow					*window;
+	Hud							*hud;
+	sf::Sprite					*background;
+	sf::Music					*music;
 
 	// Objects Attributes
 
@@ -43,6 +43,8 @@ private:
 	std::vector<Pistopois*> pistopois;
 	
 
+	
+	std::vector<sf::String*>	wave;
 
 
 public:
@@ -57,13 +59,17 @@ private:
 
 	// Main Methods
 
+	void		GenerateWave();
 	void		PlacePlante();
-	void		SpawnZombie();
+	void		SpawnZombie(float x, float y);
 
 	void		HandleEvents();
 	bool		IsOnPlay();
 
 	void		RenderGame();
+	void		Defeat();
+
+	void		MoveZombies();
 
 	void        PistopoisShoot();
 	void		DeleteBullet();
