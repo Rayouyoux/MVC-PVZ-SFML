@@ -20,6 +20,17 @@ Hud::Hud(GameWindow* window) {
 	m_money.setStyle(sf::Text::Bold);
 	m_money.setPosition(50, 0);
 
+	m_choosetexture = new sf::Texture();
+	m_choose = new sf::Sprite();
+
+	if (!m_choosetexture->loadFromFile("rsrc/img/hud/choose.png"))
+	{
+		std::cout << "Error loading choose.png" << std::endl;
+		exit(1);
+	}
+	m_choose->setTexture(*m_choosetexture);
+	m_choose->setPosition(80, 200);
+
 	m_moneytexture = new sf::Texture();
 	m_moneyIcon = new sf::Sprite();
 
@@ -45,6 +56,7 @@ Hud::Hud(GameWindow* window) {
 
 void	Hud::DrawHud(int money, int zombienum, bool isPlaying) {
 	m_window->w_window->draw(*m_moneyIcon);
+	m_window->w_window->draw(*m_choose);
 	if (!isPlaying)
 		m_window->w_window->draw(*m_playIcon);
 	m_money.setString(std::to_string(money));

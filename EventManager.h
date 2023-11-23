@@ -35,7 +35,7 @@ public:
 
 	EventManager(func* event);
 
-	void Update(sf::RenderWindow* oWindow, int typePlant, int money);
+	void Update(sf::RenderWindow* oWindow, bool canBePlace);
 
 	void ManageEvent(sf::Event::EventType eType, sf::Mouse::Button mousePressed);
 

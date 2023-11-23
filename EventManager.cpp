@@ -1,4 +1,5 @@
 #include "EventManager.h"
+#include <iostream>
 
 EventManager* EventManager::eInstance = nullptr;
 
@@ -23,7 +24,7 @@ EventManager::EventManager()
 
 }
 
-void EventManager::Update(sf::RenderWindow* oWindow, int typePlant, int money)
+void EventManager::Update(sf::RenderWindow* oWindow, bool canBePlace)
 {
 	//EVENT
 	sf::Event oEvent;
@@ -32,15 +33,7 @@ void EventManager::Update(sf::RenderWindow* oWindow, int typePlant, int money)
 		if (oEvent.type == sf::Event::Closed)
 			oWindow->close();
 
-		if (typePlant == 1 and money >=100)
-		{
-			ManageEvent(oEvent.type, oEvent.mouseButton.button);
-		}
-		else if (typePlant == 2 and money >= 150)
-		{
-			ManageEvent(oEvent.type, oEvent.mouseButton.button);
-		}
-		else if (typePlant == 3 and money >=50)
+		if (canBePlace)
 		{
 			ManageEvent(oEvent.type, oEvent.mouseButton.button);
 		}

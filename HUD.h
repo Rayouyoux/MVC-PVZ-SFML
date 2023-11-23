@@ -19,6 +19,9 @@ private:
 	sf::Texture*				m_playtexture;
 	sf::Sprite*					m_playIcon;
 
+	sf::Texture*				m_choosetexture;
+	sf::Sprite*					m_choose;
+
 public:
 
 	

@@ -4,7 +4,7 @@
 Bullet::Bullet(float posx, float posy) {
 	m_position.x = posx;
 	m_position.y = posy;
-	m_speed = 100.f;
+	m_speed = 500.f;
 	m_direction.x = 1;
 	m_direction.y = 0;
 	sf::Texture* m_texture = new sf::Texture();

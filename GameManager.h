@@ -4,11 +4,13 @@
 #include <map>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+
 #include "Bullet.h"
 #include "Pistopois.h"
 #include "FileManager.h"
 #include "LevelManager.h"
 #include "EventManager.h"
+
 typedef void(*func)();
 using namespace std;
 class GameWindow;
@@ -18,6 +20,7 @@ class SunFlower;
 class Sun;
 class Hud;
 typedef void(*func)();
+
 class GameManager
 {
 private:
@@ -27,6 +30,7 @@ private:
 	sf::Clock	clock;
 	sf::Clock	pistoClock;
 	sf::Clock	sunoClock;
+	float		fpsLimit;
 	
 	bool		isPlaying;
 	bool		isDone;
@@ -44,6 +48,8 @@ private:
 	Hud* hud;
 	sf::Sprite* background;
 	sf::Music*	music;
+
+	sf::Shape *CurrentPlant;
 
 	// Objects Attributes
 	EventManager* eEventManager;
@@ -77,7 +83,7 @@ public:
 	{
 		return pInstance;
 	}
-	int         typePlant = 0;
+	int         typePlant;
 	void		PlacePlante();
 
 private:
@@ -94,8 +100,13 @@ private:
 	void		HandleEvents();
 	bool		IsOnSun(sf::Vector2i localposition);
 	bool		IsOnPlay();
+	bool		IsOnPisto(sf::Vector2i localposition);
+	bool		IsOnPotatoe(sf::Vector2i localposition);
+	bool		IsOnSunflower(sf::Vector2i localposition);
+	void		GenerateSuns();
 
 	void		RenderGame();
+	void		SetCurrentPlant(float x,float y);
 	void		CheckDefeat();
 	void		CheckVictory();
 
@@ -103,6 +114,7 @@ private:
 	void		WinScreen();
 	void		Credits();
 
+	void		SpawnWave();
 	void		MoveZombies();
 
 	void        PistopoisShoot();

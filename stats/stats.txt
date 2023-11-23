@@ -1,10 +1,10 @@
-sunflower_rate:50
+sunflower_rate:5
 sunflower_cost:50
 patate_hp:350
 patate_cost:150
 pistopois_dmg:10
-pistopois_rate:10
+pistopois_rate:2
 pistopois_cost:100
 sun_rate:10
 sun_speed:100
-sun_value:16
+sun_value:50

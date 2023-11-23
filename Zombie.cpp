@@ -3,10 +3,7 @@
 #include <iostream>
 
 Zombie::Zombie(int m_id) : GameObject() {
-	m_Speed = 3;
-	m_Hp = 50;
-	m_HpMax = 50;
-	m_Damage = 10;
+	m_Speed = 0;
 	m_vDirection;
 	m_vDirection.push_back(-1);
 
@@ -34,6 +31,10 @@ float		Zombie::GetHp() {
 	return m_Hp;
 }
 
+float		Zombie::GetSpeed() {
+	return m_Speed;
+}
+
 float		Zombie::GetDmg() {
 	return m_Damage;
 }
@@ -52,17 +53,18 @@ bool Zombie::CheckCollision(GameObject* object) {
 }
 
 void Zombie::move(float fDeltaTime) {
-	m_position.x -= 10 * fDeltaTime * m_Speed;
+	m_position.x -= 10 * fDeltaTime * m_CurrentSpeed;
 	SetPosition(m_position.x, m_position.y);
 }
 
 void Zombie::setStats(float fSpeed, float fHp, float fMaxHp, float fDamage) {
 	m_Speed = fSpeed;
+	m_CurrentSpeed = fSpeed;
 	m_Hp = fHp;
 	m_HpMax = fMaxHp;
 	m_Damage = fDamage;
 }
 
 void    Zombie::SetSpeed(int value) {
-	m_Speed = value;
+	m_CurrentSpeed = value;
 }
