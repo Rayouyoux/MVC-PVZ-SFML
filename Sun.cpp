@@ -2,12 +2,12 @@
 
 #include <iostream>
 
-Sun::Sun() : GameObject() {
-	m_rate = 10.f;
-	m_speed = 100.f;
+Sun::Sun(float rate, float speed, float value) : GameObject() {
+	m_rate = rate;
+	m_speed = speed;
 	m_direction.x = 0;
 	m_direction.y = 1;
-	m_value = 20;
+	m_value = value;
 	SetSize(100, 100);
 	sf::Texture* m_texture = new sf::Texture();
 	if (!m_texture->loadFromFile("rsrc/img/sprite/sun/sun.png")) {

@@ -71,7 +71,7 @@ GameManager::GameManager() {
 void GameManager::SpawnSun(bool plant) {
 	int xPos = 0;
 	int y = 0;
-	Sun* oSun = new Sun();
+	Sun* oSun = new Sun(stats["sun_rate"], stats["sun_speed"], stats["sun_value"]);
 	if (plant == false) {
 		int xPos = (int)oSun->GetSize().x + (rand() % (int(window->GetWidth() - oSun->GetSize().x)));
 		std::cout << "aa";
