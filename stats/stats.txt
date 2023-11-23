@@ -1,0 +1,5 @@
+pistopois_dmg:10
+pistopois_rate:10
+sun_rate:10
+sun_speed:100
+sun_value:20

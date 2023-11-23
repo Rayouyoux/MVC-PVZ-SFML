@@ -29,6 +29,7 @@ void LevelManager::createLevel(vector<Zombie*> voZombies) {
 					oZombie.setStats(mZombieInfos["SPD"], mZombieInfos["HP"], mZombieInfos["HP"], mZombieInfos["DMG"]);
 					oZombie.SetPosition(fSpawnPosX, fSpawnPosY);
 					voZombies.push_back(&oZombie);
+					mZombieInfos.clear();
 				}
 			}
 			fSpawnPosX += 60;

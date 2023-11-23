@@ -1,10 +1,12 @@
 #pragma once
 
 #include <vector>
+#include <map>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "Bullet.h"
 #include "Pistopois.h"
+#include "FileManager.h"
 
 class GameWindow;
 class Zombie;
@@ -43,7 +45,7 @@ private:
 	std::vector<Zombie*>	zombies;
 	std::vector<Plante*>	plantes;
 	std::vector<Pistopois*> pistopois;
-
+	std::map<std::string, float> stats;
 
 
 	std::vector<sf::String*>	wave;
