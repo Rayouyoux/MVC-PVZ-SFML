@@ -122,7 +122,7 @@ void GameManager::PlacePlante(int a) {
 		else
 		{
 			pistopois.push_back(oPlante);
-			money -= 100;
+			money -= stats["pistopois_cost"];
 		}
 	}
 	else if (a == 2) {
@@ -137,7 +137,7 @@ void GameManager::PlacePlante(int a) {
 		else
 		{
 			plantes.push_back(oPlante);
-			money -= 150;
+			money -= stats["patate_cost"];
 		}
 	}
 	else if (a == 3) {
@@ -151,7 +151,7 @@ void GameManager::PlacePlante(int a) {
 		if (oPlante->CanBePlaced(window) == false) {
 			plantes.pop_back();
 		}
-		money -= 50;
+		money -= stats["sunflower_cost"];
 
 	}
 

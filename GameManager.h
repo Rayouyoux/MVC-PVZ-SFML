@@ -7,6 +7,7 @@
 #include "Bullet.h"
 #include "Pistopois.h"
 #include "FileManager.h"
+#include "LevelManager.h"
 #include "EventManager.h"
 
 class GameWindow;
