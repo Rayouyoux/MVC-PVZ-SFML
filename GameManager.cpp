@@ -434,7 +434,6 @@ void    GameManager::CheckColls() {
 			if (zombies.at(i)->CheckCollision(plantes.at(j))) {
 				zombies.at(i)->m_Idle = true;
 				plantes.at(j)->DecreaseLife(zombies.at(i)->GetDmg() * fDeltaTime);
-				std::cout << plantes.at(j)->GetHP() << std::endl;
 				if (plantes.at(j)->GetHP() <= 0)
 				{
 					delete plantes[j];
