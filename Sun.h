@@ -10,8 +10,7 @@ private:
 	sf::Vector2f m_direction;
 
 public:
-	Sun();
-	float		m_rate;
+	Sun(float rate, float speed, float value);
 	float		m_value;
 	void		SetSpeed(float s);
 	void		SetDirection(float x, float y);

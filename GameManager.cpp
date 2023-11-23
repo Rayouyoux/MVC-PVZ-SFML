@@ -63,9 +63,9 @@ GameManager::GameManager() {
 	music->setVolume(10.0f);
 	music->setLoop(true);
 
-	FileManager manager("stats/stats.txt");
-	std::vector<std::string> vsFileLines = manager.readFileLines();
-	std::map<std::string, float> stats = manager.getStatsMap(vsFileLines);                         
+	FileManager statsFileManager("stats/stats.txt");
+	std::vector<std::string> vsFileLines = statsFileManager.readFileLines();
+	stats = statsFileManager.getStatsMap(vsFileLines);
 }
 
 /*
@@ -74,7 +74,11 @@ GameManager::GameManager() {
 ---------------------------------------------------------------------------------
 */
 void GameManager::SpawnSun(bool plant, int index) {
-	Sun* oSun = new Sun();
+
+
+	int xPos = 0;
+	int y = 0;
+	Sun* oSun = new Sun(stats["sun_rate"], stats["sun_speed"], stats["sun_value"]);
 	sunRate = oSun->m_rate;
 	if (plant == false) {
 		int xPos = (int)oSun->GetSize().x + (rand() % (int(window->GetWidth() - oSun->GetSize().x)));
@@ -122,7 +126,7 @@ void GameManager::MoveZombies() {
 
 void GameManager::PlacePlante() {
 	if (typePlant == 1) {
-		Pistopois* oPlante = new Pistopois(1);
+		Pistopois* oPlante = new Pistopois(1, stats["pistopois_rate"], stats["pistopois_dmg"]);
 		plantes.push_back(oPlante);
 		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 			oPlante->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
@@ -136,11 +140,11 @@ void GameManager::PlacePlante() {
 		else
 		{
 			pistopois.push_back(oPlante);
-			money -= 100;
+			money -= stats["pistopois_cost"];
 		}
 	}
 	else if (typePlant == 2) {
-		Patate* oPlante = new Patate(2);
+		Patate* oPlante = new Patate(2, stats["patate_hp"]);
 		plantes.push_back(oPlante);
 		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 			oPlante->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
@@ -150,11 +154,12 @@ void GameManager::PlacePlante() {
 		}
 		else
 		{
-			money -= 150;
+			plantes.push_back(oPlante);
+			money -= stats["patate_cost"];
 		}
 	}
 	else if (typePlant == 3) {
-		SunFlower* oPlante = new SunFlower(3);
+		SunFlower* oPlante = new SunFlower(3, stats["sunflower_rate"]);
 		
 		plantes.push_back(oPlante);
 		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
@@ -167,8 +172,10 @@ void GameManager::PlacePlante() {
 		}
 		else {
 			sunFlowers.push_back(oPlante);
-			money -= 50;
+			money -= stats["sunflower_cost"];
 		}
+		
+
 		
 
 	}

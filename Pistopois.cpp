@@ -2,9 +2,9 @@
 #include <iostream>
 
 
-Pistopois::Pistopois(int id) : Plante(id) {
-	m_rate = 2;
-	m_damage = 10.f;
+Pistopois::Pistopois(int id, float rate, float dmg) : Plante(id) {
+	m_rate = rate;
+	m_damage = dmg;
 	SetSize(100, 100);
 	sf::Texture* m_texture = new sf::Texture();
 	if (!m_texture->loadFromFile("rsrc/img/sprite/plantes/Pistopois.png")) {

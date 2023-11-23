@@ -10,7 +10,7 @@ private:
 	float m_damage;
 public:
 	
-	Pistopois(int id);
+	Pistopois(int id, float rate, float dmg);
 
 	void SetRate(float r);
 

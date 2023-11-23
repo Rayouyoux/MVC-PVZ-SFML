@@ -5,6 +5,6 @@ class Patate: public Plante
 private:
 
 public:
-	Patate(int id);
+	Patate(int id, float hp);
 };
 

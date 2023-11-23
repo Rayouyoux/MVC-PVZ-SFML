@@ -1,8 +1,8 @@
 #include "SunFlower.h"
 #include <iostream>
 
-SunFlower::SunFlower(int m_id) : Plante(m_id) {
-	m_rate = 5;
+SunFlower::SunFlower(int m_id, float rate) : Plante(m_id) {
+	m_iRate = rate;
 	SetSize(100, 100);
 	sf::Texture* m_texture = new sf::Texture();
 	if (!m_texture->loadFromFile("rsrc/img/sprite/plantes/Tournesol.png")) {

@@ -5,9 +5,9 @@
 class SunFlower : public Plante
 {
 public:
-	float m_rate;
+	int m_iRate;
+	SunFlower(int m_id, float rate);
 	sf::Clock	sunoClock;
 
-	SunFlower(int m_id);
 };
 
