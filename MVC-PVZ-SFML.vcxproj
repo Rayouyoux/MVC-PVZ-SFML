@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="FileManager.cpp" />
@@ -142,10 +143,12 @@
     <ClCompile Include="Pistopois.cpp" />
     <ClCompile Include="Plante.cpp" />
     <ClCompile Include="Sun.cpp" />
+    <ClCompile Include="SunFlower.cpp" />
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="EventManager.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
@@ -156,6 +159,7 @@
     <ClInclude Include="Pistopois.h" />
     <ClInclude Include="Plante.h" />
     <ClInclude Include="Sun.h" />
+    <ClInclude Include="SunFlower.h" />
     <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

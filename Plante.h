@@ -21,6 +21,7 @@ public:
 	// Main Methods
 	
 	bool	CanBePlaced(GameWindow* window);
+	void		SetHP(int hp);
 	int		GetHP();
 	int		GetHPmax();
 	bool	GetPowerUpStatus();

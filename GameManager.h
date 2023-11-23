@@ -5,13 +5,15 @@
 #include <SFML/Audio.hpp>
 #include "Bullet.h"
 #include "Pistopois.h"
+#include "EventManager.h"
 
 class GameWindow;
 class Zombie;
 class Plante;
+class SunFlower;
 class Sun;
 class Hud;
-
+typedef void(*func)();
 class GameManager
 {
 private:
@@ -36,12 +38,14 @@ private:
 	sf::Music*	music;
 
 	// Objects Attributes
+	EventManager* eEventManager;
 
 	int						money;
 	std::vector<Bullet*>	bullets;
 	std::vector<Sun*>		suns;
 	std::vector<Zombie*>	zombies;
 	std::vector<Plante*>	plantes;
+	std::vector<SunFlower*> sunFlowers;
 	std::vector<Pistopois*> pistopois;
 
 
@@ -56,14 +60,24 @@ public:
 	void		Start();
 
 	~GameManager();
+	/*static GameManager* pInstance;
+	static void Initialize()
+	{
+		GameManager::pInstance = new GameManager();
+	}
+	static GameManager* Get()
+	{
+		return pInstance;
+	}*/
+	void		PlacePlante(int a);
 
 private:
-
+	
 	// Main Methods
 
 	void		GenerateWave();
-	void		PlacePlante();
-	void		SpawnSun();
+	
+	void		SpawnSun(bool plant);
 	void		SpawnZombie(float x, float y);
 	void		CheckColls();
 

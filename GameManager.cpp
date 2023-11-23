@@ -11,6 +11,7 @@
 #include "HUD.h"
 
 #include "Pistopois.h"
+#include "SunFlower.h"
 #include "Zombie.h"
 #include "Sun.h"
 
@@ -63,17 +64,32 @@ GameManager::GameManager() {
 |					Here are all the objects methods							|
 ---------------------------------------------------------------------------------
 */
-void GameManager::SpawnSun() {
-
+void GameManager::SpawnSun(bool plant) {
+	int xPos = 0;
+	int y = 0;
 	Sun* oSun = new Sun();
-	int xPos = (int)oSun->GetSize().x + (rand() % (int(window->GetWidth() - oSun->GetSize().x)));
-	int y = -10;
-	oSun->SetPosition(xPos, y);
-	suns.push_back(oSun);
+	if (plant == false) {
+		int xPos = (int)oSun->GetSize().x + (rand() % (int(window->GetWidth() - oSun->GetSize().x)));
+		std::cout << "aa";
+		int y = -10;
+		suns.push_back(oSun);
+		oSun->SetPosition(xPos, y);
+		
+	}
+	else {
+		for (int i = 0; i < sunFlowers.size(); i++) {
+			int xPos = sunFlowers[i]->GetPosition().x;
+			int y = sunFlowers[i]->GetPosition().y;
+			oSun->SetSpeed(0);
+			suns.push_back(oSun);
+			oSun->SetPosition(xPos, y);
+		}
+
+	}
 }
 
 void GameManager::SpawnZombie(float x, float y) {
-	Zombie* oZombie = new Zombie();
+	Zombie* oZombie = new Zombie(2);
 	oZombie->SetPosition(x, y);
 	zombies.push_back(oZombie);
 
@@ -87,23 +103,35 @@ void GameManager::MoveZombies() {
 	}
 }
 
-void GameManager::PlacePlante() {
-	Pistopois* oPistopois = new Pistopois(1);
-
-	plantes.push_back(oPistopois);
-
-	while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
-		oPistopois->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
-		RenderGame();
-	}
-	if (oPistopois->CanBePlaced(window) == false) {
-		plantes.pop_back();
-	}
-	else
-	{
-		pistopois.push_back(oPistopois);
+void GameManager::PlacePlante(int a) {
+	if (a == 1) {
+		Pistopois* oPlante = new Pistopois(1);
+		plantes.push_back(oPlante);
+		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
+			oPlante->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
+			RenderGame();
+		}
+		if (oPlante->CanBePlaced(window) == false) {
+			plantes.pop_back();
+		}
+		pistopois.push_back(oPlante);
 		money -= 100;
 	}
+	else if (a == 3) {
+		SunFlower* oPlante = new SunFlower(3);
+		sunFlowers.push_back(oPlante);
+		plantes.push_back(oPlante);
+		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
+			oPlante->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
+			RenderGame();
+		}
+		if (oPlante->CanBePlaced(window) == false) {
+			plantes.pop_back();
+		}
+		money -= 100;
+
+	}
+
 }
 
 void GameManager::PistopoisShoot() {
@@ -124,7 +152,10 @@ void GameManager::DeleteBullet() {
 		}
 	}
 }
-
+/*void EventPlacePlants(int a)
+{
+	GameManager::Get()->PlacePlante(a);
+}*/
 /*
 ---------------------------------------------------------------------------------
 |				Here are all Rendering related methods							|
@@ -152,6 +183,7 @@ void		GameManager::RenderGame() {
 	}
 	if (!suns.empty()) {
 		for (int i = 0; i < suns.size(); i++) {
+			
 			suns[i]->Move(fDeltaTime);
 			window->DrawObject(suns.at(i));
 		}
@@ -316,6 +348,7 @@ void GameManager::Credits() {
 	sf::Sprite	credits;
 	Event		event;
 	bool		loop = true;
+	//eEventManager->Get()->AddComponent(sf::Event::EventType::KeyPressed, sf::Keyboard::Key::Escape, loop = false);
 
 	fDeltaTime = clock.restart().asSeconds();
 
@@ -357,6 +390,8 @@ void GameManager::Credits() {
 
 void GameManager::HandleEvents() {
 	Event		event;
+	int a = 0;
+	//eEventManager->Get()->AddComponent(sf::Event::EventType::MouseButtonPressed, sf::Mouse::Left, &EventPlacePlants(a));
 	sf::Clock	oClock;
 
 	srand(time(NULL));
@@ -375,7 +410,13 @@ void GameManager::HandleEvents() {
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus() and IsOnSun(localposition));
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 				if (money >= 100)
-					PlacePlante();
+					if (Keyboard::isKeyPressed(Keyboard::Num1)) {
+						a = 1;
+					}
+					else if (Keyboard::isKeyPressed(Keyboard::Num2)) {
+						a = 3;
+					}
+					PlacePlante(a);
 			}
 		}
 		LimitFps();
@@ -439,7 +480,8 @@ void GameManager::LimitFps() {
 	fDeltaTime = clock.restart().asSeconds();
 	if (pistoClock.getElapsedTime().asSeconds() >= 2) {
 		fpistoDeltaTime = pistoClock.restart().asSeconds();
-		SpawnSun();
+		SpawnSun(false);
+		SpawnSun(true);
 		PistopoisShoot();
 	}
 	//if (g_deltaTime < g_fpsLimit) {

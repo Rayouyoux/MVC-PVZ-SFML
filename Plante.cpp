@@ -21,6 +21,9 @@ bool	Plante::CanBePlaced(GameWindow* window) {
 		return false;
 	return true;
 }
+void		Plante::SetHP(int hp) {
+	m_hp = hp;
+}
 
 int		Plante::GetHP() {
 	return m_hp;

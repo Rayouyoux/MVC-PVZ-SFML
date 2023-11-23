@@ -13,10 +13,11 @@ private:
 
 public:
 
-	Zombie();
+	Zombie(int m_id);
 
-	int		GetHp();
-	void	DecreaseLife(int value);
+	float		GetHp();
+	void	DecreaseLife(float value);
+	void	setStats(float fSpeed, float fHp, float fMaxHp, float fDamage);
 	bool	CheckCollision(GameObject* object);
 
 	void	move(float fDeltaTime);
