@@ -380,8 +380,10 @@ void GameManager::HandleEvents() {
 	int a = 0;
 	bool keypressed = false;
 
-	srand(time(NULL));
-	SpawnZombie(1980, 800);
+	srand(time(NULL)); 
+	SpawnZombie(1970, 800);
+	SpawnZombie(1980, 600);
+	SpawnZombie(1990, 400);
 	while (!isDone) {
 
 		while (window->w_window->pollEvent(event))
@@ -450,16 +452,34 @@ void GameManager::HandleEvents() {
 
 }
 
-void	GameManager::CheckColls() {
-	for (int i = 0; i < bullets.size(); ++i) {
-		for (int j = 0; j < zombies.size(); ++j)
+void    GameManager::CheckColls() {
+
+	for (int i = 0; i < zombies.size(); ++i) {
+		for (int j = 0; j < bullets.size(); ++j)
 		{
-			if (zombies.at(j)->CheckCollision(bullets.at(i))) {
-				delete bullets[i];
-				bullets.erase(bullets.begin() + i);
-				if (zombies.at(j)->GetHp() <= 0) {
-					delete zombies[j];
-					zombies.erase(zombies.begin() + j);
+			if (zombies.at(i)->CheckCollision(bullets.at(j))) {
+				delete bullets[j];
+				bullets.erase(bullets.begin() + j);
+				zombies.at(i)->DecreaseLife(10);
+				if (zombies.at(i)->GetHp() <= 0) {
+					delete zombies[i];
+					zombies.erase(zombies.begin() + i);
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < zombies.size(); ++i) {
+		for (int j = 0; j < plantes.size(); ++j)
+		{
+			if (zombies.at(i)->CheckCollision(plantes.at(j))) {
+				zombies.at(i)->SetSpeed(0);
+				plantes.at(j)->DecreaseLife(0.003);
+				if (plantes.at(j)->GetHP() <= 0)
+				{
+					delete plantes[j];
+					plantes.erase(plantes.begin() + j);
+					zombies.at(i)->SetSpeed(3);
 				}
 			}
 		}

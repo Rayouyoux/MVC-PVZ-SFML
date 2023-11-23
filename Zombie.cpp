@@ -21,7 +21,7 @@ Zombie::Zombie() : GameObject() {
 	m_sprite->setOrigin(GetSize().x / 2, GetSize().y / 2);
 }
 
-float		Zombie::GetHp() {
+float Zombie::GetHp() {
 	return m_Hp;
 }
 
@@ -33,7 +33,6 @@ bool Zombie::CheckCollision(GameObject* object) {
 	if (GetPosition().x - GetSize().x / 2 <= object->GetPosition().x + object->GetSize().x / 2 and \
 		object->GetPosition().y >= GetPosition().y - GetSize().y / 2 and \
 		object->GetPosition().y <= GetPosition().y + GetSize().y / 2) {
-		DecreaseLife(10);
 		return true;
 	}
 	return false;
@@ -49,4 +48,8 @@ void Zombie::setStats(float fSpeed, float fHp, float fMaxHp, float fDamage) {
 	m_Hp = fHp;
 	m_HpMax = fMaxHp;
 	m_Damage = fDamage;
+}
+
+void    Zombie::SetSpeed(int value) {
+	m_Speed = value;
 }

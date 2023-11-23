@@ -38,3 +38,7 @@ int Plante::GetId() {
 void Plante::SetHp(float hp) {
 	m_hp = hp;
 }
+
+void Plante::DecreaseLife(float value) {
+	m_hp -= value;
+}

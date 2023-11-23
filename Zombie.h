@@ -5,21 +5,21 @@
 class Zombie : public GameObject
 {
 private:
-	float					m_Speed;
-	float					m_Hp;
-	float					m_HpMax;
-	float				m_Damage;
-	std::vector<float>	m_vDirection;
+    int                    m_Speed;
+    int                    m_Hp;
+    int                    m_HpMax;
+    float                m_Damage;
+    std::vector<float>    m_vDirection;
 
 public:
 
-	Zombie();
+    Zombie();
 
-	float		GetHp();
-	void	DecreaseLife(float value);
-	void	setStats(float fSpeed, float fHp, float fMaxHp, float fDamage);
-	bool	CheckCollision(GameObject* object);
+    void    SetSpeed(int value);
+    float        GetHp();
+    void    DecreaseLife(float value);
+    bool    CheckCollision(GameObject* object);
+    void    setStats(float fSpeed, float fHp, float fMaxHp, float fDamage);
 
-	void	move(float fDeltaTime);
+    void    move(float fDeltaTime);
 };
-
