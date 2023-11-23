@@ -58,10 +58,10 @@ map<string, map<string, float>> FileManager::getLevelInfoMap(vector<string> vsFi
     int iIndex = getInfoPos(vsFileLines);
     map<string, map<string, float>> mLevelInformations;
 
-    for (int i = iIndex; i < vsFileLines.size(); i = i + 5) {
+    for (int i = iIndex; i < vsFileLines.size(); i = i + 6) {
         map<string, float> mZombieInfos;
 
-        for (int j = 1; j < 4; j++) {
+        for (int j = 1; j < 5; j++) {
             size_t iColonPos = vsFileLines[i + j].find(':');
             string sStatName = vsFileLines[i + j].substr(0, iColonPos);
             string sStatValue = vsFileLines[i + j].substr(iColonPos + 1);
