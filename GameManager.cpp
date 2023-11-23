@@ -149,12 +149,12 @@ void GameManager::PlacePlante() {
 		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 			oPlante->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
 			RenderGame();
-		}if (oPlante->CanBePlaced(window) == false) {
+		}
+		if (oPlante->CanBePlaced(window) == false) {
 			plantes.pop_back();
 		}
 		else
 		{
-			plantes.push_back(oPlante);
 			money -= stats["patate_cost"];
 		}
 	}
@@ -591,7 +591,7 @@ void GameManager::LimitFps() {
 	}
 	else if (!sunFlowers.empty()) {
 		for (int i = 0; i < sunFlowers.size(); i++) {
-			if (sunFlowers[i]->sunoClock.getElapsedTime().asSeconds() >= sunFlowers[i]->m_rate) {
+			if (sunFlowers[i]->sunoClock.getElapsedTime().asSeconds() >= sunFlowers[i]->m_iRate) {
 				fsunFlowerDeltaTime = sunFlowers[i]->sunoClock.restart().asSeconds();
 				SpawnSun(true,i);
 			}
