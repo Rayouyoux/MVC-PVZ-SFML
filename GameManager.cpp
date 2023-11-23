@@ -139,7 +139,7 @@ void GameManager::PlacePlante(int a) {
 			plantes.push_back(oPlante);
 			money -= 150;
 		}
-
+	}
 	else if (a == 3) {
 		SunFlower* oPlante = new SunFlower(3);
 		sunFlowers.push_back(oPlante);
@@ -418,7 +418,6 @@ void GameManager::HandleEvents() {
 	int a = 0;
 	//eEventManager->Get()->AddComponent(sf::Event::EventType::MouseButtonPressed, sf::Mouse::Left, &EventPlacePlants(a));
 	sf::Clock	oClock;
-	int a = 0;
 	bool keypressed = false;
 
 	srand(time(NULL)); 

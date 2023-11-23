@@ -5,7 +5,7 @@ SunFlower::SunFlower(int m_id) : Plante(m_id) {
 	m_iRate = 50;
 	SetSize(100, 100);
 	sf::Texture* m_texture = new sf::Texture();
-	if (!m_texture->loadFromFile("rsrc/img/sprite/plantes/Tournesol_Sourire.png")) {
+	if (!m_texture->loadFromFile("rsrc/img/sprite/plantes/Tournesol.png")) {
 		std::cout << "failed to load texture" << std::endl;
 		exit(1);
 	}
