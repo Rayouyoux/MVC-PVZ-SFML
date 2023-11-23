@@ -54,12 +54,12 @@ int FileManager::getInfoPos(vector<string> vsFileLines) {
     return iIndex;
 }
 
-map<string, map<string, int>> FileManager::getLevelInfoMap(vector<string> vsFileLines) {
+map<string, map<string, float>> FileManager::getLevelInfoMap(vector<string> vsFileLines) {
     int iIndex = getInfoPos(vsFileLines);
-    map<string, map < string, int>> mLevelInformations;
+    map<string, map<string, float>> mLevelInformations;
 
     for (int i = iIndex; i < vsFileLines.size(); i = i + 5) {
-        map<string, int> mZombieInfos;
+        map<string, float> mZombieInfos;
 
         for (int j = 1; j < 4; j++) {
             size_t iColonPos = vsFileLines[i + j].find(':');
