@@ -2,7 +2,7 @@
 #include <iostream>
 
 SunFlower::SunFlower(int m_id) : Plante(m_id) {
-	m_iRate = 50;
+	m_rate = 5;
 	SetSize(100, 100);
 	sf::Texture* m_texture = new sf::Texture();
 	if (!m_texture->loadFromFile("rsrc/img/sprite/plantes/Tournesol.png")) {

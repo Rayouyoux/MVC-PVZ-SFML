@@ -3,7 +3,7 @@
 
 
 Pistopois::Pistopois(int id) : Plante(id) {
-	m_rate = 10.f;
+	m_rate = 2;
 	m_damage = 10.f;
 	SetSize(100, 100);
 	sf::Texture* m_texture = new sf::Texture();

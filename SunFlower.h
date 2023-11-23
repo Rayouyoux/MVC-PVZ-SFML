@@ -1,10 +1,13 @@
 #pragma once
 #include "Plante.h"
+#include <SFML/Graphics.hpp>
 
 class SunFlower : public Plante
 {
 public:
-	int m_iRate;
+	float m_rate;
+	sf::Clock	sunoClock;
+
 	SunFlower(int m_id);
 };
 

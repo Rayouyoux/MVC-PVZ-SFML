@@ -23,7 +23,7 @@ EventManager::EventManager()
 
 }
 
-void EventManager::Update(sf::RenderWindow* oWindow, bool bCanShoot)
+void EventManager::Update(sf::RenderWindow* oWindow, int typePlant, int money)
 {
 	//EVENT
 	sf::Event oEvent;
@@ -32,11 +32,18 @@ void EventManager::Update(sf::RenderWindow* oWindow, bool bCanShoot)
 		if (oEvent.type == sf::Event::Closed)
 			oWindow->close();
 
-		if (bCanShoot)
+		if (typePlant == 1 and money >=100)
 		{
 			ManageEvent(oEvent.type, oEvent.mouseButton.button);
 		}
-
+		else if (typePlant == 2 and money >= 150)
+		{
+			ManageEvent(oEvent.type, oEvent.mouseButton.button);
+		}
+		else if (typePlant == 3 and money >=50)
+		{
+			ManageEvent(oEvent.type, oEvent.mouseButton.button);
+		}
 		ManageEvent(oEvent.type, oEvent.key.code);
 	}
 }

@@ -8,7 +8,8 @@
 #include "Pistopois.h"
 #include "FileManager.h"
 #include "EventManager.h"
-
+typedef void(*func)();
+using namespace std;
 class GameWindow;
 class Zombie;
 class Plante;
@@ -24,12 +25,15 @@ private:
 
 	sf::Clock	clock;
 	sf::Clock	pistoClock;
+	sf::Clock	sunoClock;
 
 	bool		isDone;
 	bool		hasWon;
 	bool		hasLost;
 
-
+	float		sunRate;
+	float		fsunFlowerDeltaTime;
+	float		fsunDeltaTime;
 	float		fpistoDeltaTime;
 	float		fDeltaTime;
 	// Window Attributes
@@ -43,16 +47,16 @@ private:
 	EventManager* eEventManager;
 
 	int						money;
-	std::vector<Bullet*>	bullets;
-	std::vector<Sun*>		suns;
-	std::vector<Zombie*>	zombies;
-	std::vector<Plante*>	plantes;
-	std::vector<SunFlower*> sunFlowers;
-	std::vector<Pistopois*> pistopois;
-	std::map<std::string, float> stats;
+	vector<Bullet*>	bullets;
+	vector<Sun*>		suns;
+	vector<Zombie*>	zombies;
+	vector<Plante*>	plantes;
+	vector<SunFlower*> sunFlowers;
+	vector<Pistopois*> pistopois;
+	map<string, float> stats;
 
 
-	std::vector<sf::String*>	wave;
+	vector<sf::String*>	wave;
 
 
 public:
@@ -62,7 +66,7 @@ public:
 	void		Start();
 
 	~GameManager();
-	/*static GameManager* pInstance;
+	static GameManager* pInstance;
 	static void Initialize()
 	{
 		GameManager::pInstance = new GameManager();
@@ -70,8 +74,9 @@ public:
 	static GameManager* Get()
 	{
 		return pInstance;
-	}*/
-	void		PlacePlante(int a);
+	}
+	int         typePlant = 0;
+	void		PlacePlante();
 
 private:
 	
@@ -79,7 +84,8 @@ private:
 
 	void		GenerateWave();
 	
-	void		SpawnSun(bool plant);
+	void		SpawnSun(bool plant, int index);
+
 	void		SpawnZombie(float x, float y);
 	void		CheckColls();
 
@@ -99,6 +105,7 @@ private:
 
 	void        PistopoisShoot();
 	void		DeleteBullet();
+	void        DeleteSuns();
 
 	void		LimitFps();
 };

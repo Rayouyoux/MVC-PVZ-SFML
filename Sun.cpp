@@ -3,7 +3,8 @@
 #include <iostream>
 
 Sun::Sun() : GameObject() {
-	m_rate = 10.f;
+	
+	m_rate = 10;
 	m_speed = 100.f;
 	m_direction.x = 0;
 	m_direction.y = 1;

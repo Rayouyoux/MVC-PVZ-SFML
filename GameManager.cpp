@@ -15,7 +15,9 @@
 #include "SunFlower.h"
 #include "Zombie.h"
 #include "Sun.h"
+sf::Event pressed;
 
+GameManager* GameManager::pInstance = nullptr;
 /*
 ---------------------------------------------------------------------------------
 |						Here is the constructeur								|
@@ -32,8 +34,11 @@ GameManager::GameManager() {
 	money = 1000;
 
 	fDeltaTime = 0;
-	fpistoDeltaTime = 0;
+	fpistoDeltaTime = 0; 
+	fsunFlowerDeltaTime = 0;
+	fsunDeltaTime = 0;
 
+	sunRate = 10;
 
 	window = new GameWindow();
 	sf::Texture* texture = new sf::Texture();
@@ -68,30 +73,38 @@ GameManager::GameManager() {
 |					Here are all the objects methods							|
 ---------------------------------------------------------------------------------
 */
-void GameManager::SpawnSun(bool plant) {
-	int xPos = 0;
-	int y = 0;
+void GameManager::SpawnSun(bool plant, int index) {
 	Sun* oSun = new Sun();
+	sunRate = oSun->m_rate;
 	if (plant == false) {
 		int xPos = (int)oSun->GetSize().x + (rand() % (int(window->GetWidth() - oSun->GetSize().x)));
-		std::cout << "aa";
 		int y = -10;
 		suns.push_back(oSun);
 		oSun->SetPosition(xPos, y);
 		
 	}
 	else {
-		for (int i = 0; i < sunFlowers.size(); i++) {
-			int xPos = sunFlowers[i]->GetPosition().x;
-			int y = sunFlowers[i]->GetPosition().y;
+		//for (int i = 0; i < sunFlowers.size(); i++) {
+			int xPos = sunFlowers[index]->GetPosition().x;
+			int y = sunFlowers[index]->GetPosition().y;
 			oSun->SetSpeed(0);
 			suns.push_back(oSun);
 			oSun->SetPosition(xPos, y);
-		}
-
+		//}
+		
 	}
 }
 
+void GameManager::DeleteSuns() {
+	if (!suns.empty()) {
+		for (int i = 0; i < suns.size(); i++) {
+			if (suns[i]->GetPosition().y > window->GetHeight()) {
+				delete suns[i];
+				suns.erase(suns.begin() + i);
+			}
+		}
+	}
+}
 void GameManager::SpawnZombie(float x, float y) {
 	Zombie* oZombie = new Zombie(2);
 	oZombie->SetPosition(x, y);
@@ -107,8 +120,8 @@ void GameManager::MoveZombies() {
 	}
 }
 
-void GameManager::PlacePlante(int a) {
-	if (a == 1) {
+void GameManager::PlacePlante() {
+	if (typePlant == 1) {
 		Pistopois* oPlante = new Pistopois(1);
 		plantes.push_back(oPlante);
 		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
@@ -118,6 +131,7 @@ void GameManager::PlacePlante(int a) {
 		}
 		if (oPlante->CanBePlaced(window) == false) {
 			plantes.pop_back();
+			pistopois.pop_back();
 		}
 		else
 		{
@@ -125,7 +139,7 @@ void GameManager::PlacePlante(int a) {
 			money -= 100;
 		}
 	}
-	else if (a == 2) {
+	else if (typePlant == 2) {
 		Patate* oPlante = new Patate(2);
 		plantes.push_back(oPlante);
 		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
@@ -136,13 +150,12 @@ void GameManager::PlacePlante(int a) {
 		}
 		else
 		{
-			plantes.push_back(oPlante);
 			money -= 150;
 		}
 	}
-	else if (a == 3) {
+	else if (typePlant == 3) {
 		SunFlower* oPlante = new SunFlower(3);
-		sunFlowers.push_back(oPlante);
+		
 		plantes.push_back(oPlante);
 		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 			oPlante->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
@@ -150,8 +163,13 @@ void GameManager::PlacePlante(int a) {
 		}
 		if (oPlante->CanBePlaced(window) == false) {
 			plantes.pop_back();
+			sunFlowers.pop_back();
 		}
-		money -= 50;
+		else {
+			sunFlowers.push_back(oPlante);
+			money -= 50;
+		}
+		
 
 	}
 
@@ -177,10 +195,10 @@ void GameManager::DeleteBullet() {
 		}
 	}
 }
-/*void EventPlacePlants(int a)
+void EventPlacePlants()
 {
-	GameManager::Get()->PlacePlante(a);
-}*/
+	GameManager::Get()->PlacePlante();
+}
 /*
 ---------------------------------------------------------------------------------
 |				Here are all Rendering related methods							|
@@ -405,7 +423,7 @@ void GameManager::Credits() {
 			if (event.type == Event::Closed)
 				exit(1);
 		}
-		credits.setPosition(0, credits.getPosition().y - 20 * fDeltaTime);
+		credits.setPosition(0, credits.getPosition().y - 50 * fDeltaTime);
 		window->w_window->draw(credits);
 		window->Display();
 	}
@@ -415,8 +433,8 @@ void GameManager::Credits() {
 
 void GameManager::HandleEvents() {
 	Event		event;
-	int a = 0;
-	//eEventManager->Get()->AddComponent(sf::Event::EventType::MouseButtonPressed, sf::Mouse::Left, &EventPlacePlants(a));
+	EventManager::Initialize();
+	eEventManager->Get()->AddComponent(sf::Event::EventType::MouseButtonPressed, sf::Mouse::Left, &EventPlacePlants);
 	sf::Clock	oClock;
 	bool keypressed = false;
 
@@ -425,41 +443,41 @@ void GameManager::HandleEvents() {
 	SpawnZombie(1980, 600);
 	SpawnZombie(1990, 400);
 	while (!isDone) {
+		//EventManager::Get()->Update(window->w_window, typePlant, money);
 
 		while (window->w_window->pollEvent(event))
 		{
-
 			/*move();*/
 			sf::Vector2i localposition = sf::Mouse::getPosition(*window->w_window);
 			if (event.type == Event::Closed)
 				window->Close();
 			if (Keyboard::isKeyPressed(Keyboard::Num1)) {
-				if (a == 1 && keypressed == false) {
-					a = 0;
+				if (typePlant == 1 && keypressed == false) {
+					typePlant = 0;
 					keypressed = true;
 				}
-				else if(a != 1 && keypressed == false) {
-					a = 1;
+				else if(typePlant != 1 && keypressed == false) {
+					typePlant = 1;
 					keypressed = true;
 				}
 			}
 			if (Keyboard::isKeyPressed(Keyboard::Num2)) {
-				if (a == 2 && keypressed == false) {
-					a = 0;
+				if (typePlant == 2 && keypressed == false) {
+					typePlant = 0;
 					keypressed = true;
 				}
-				else if (a != 2 && keypressed == false) {
-					a = 2;
+				else if (typePlant != 2 && keypressed == false) {
+					typePlant = 2;
 					keypressed = true;
 				}
 			}
 			if (Keyboard::isKeyPressed(Keyboard::Num3)) {
-				if (a == 3 && keypressed == false) {
-					a = 0;
+				if (typePlant == 3 && keypressed == false) {
+					typePlant = 0;
 					keypressed = true;
 				}
-				else if (a != 3 && keypressed == false) {
-					a = 3;
+				else if (typePlant != 3 && keypressed == false) {
+					typePlant = 3;
 					keypressed = true;
 				}
 			}
@@ -470,8 +488,12 @@ void GameManager::HandleEvents() {
 				std::cout << "PLAY" << std::endl;
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus() and IsOnSun(localposition));
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
-				if (money >= 100)
-					PlacePlante(a);
+				if (money >= 100 and typePlant == 1)
+					PlacePlante();
+				if (money >= 150 and typePlant == 2)
+					PlacePlante();
+				if (money >= 50 and typePlant == 3)
+					PlacePlante();
 			}
 		}
 		LimitFps();
@@ -480,6 +502,7 @@ void GameManager::HandleEvents() {
 		CheckDefeat();
 		CheckVictory();
 		DeleteBullet();
+		DeleteSuns();
 		RenderGame();
 	}
 	window->Clear();
@@ -553,9 +576,20 @@ void GameManager::LimitFps() {
 	fDeltaTime = clock.restart().asSeconds();
 	if (pistoClock.getElapsedTime().asSeconds() >= 2) {
 		fpistoDeltaTime = pistoClock.restart().asSeconds();
-		SpawnSun(false);
-		SpawnSun(true);
 		PistopoisShoot();
+	}
+	else if (sunoClock.getElapsedTime().asSeconds() >= sunRate) {
+		fsunDeltaTime = sunoClock.restart().asSeconds();
+		SpawnSun(false, 0);
+	}
+	else if (!sunFlowers.empty()) {
+		for (int i = 0; i < sunFlowers.size(); i++) {
+			if (sunFlowers[i]->sunoClock.getElapsedTime().asSeconds() >= sunFlowers[i]->m_rate) {
+				fsunFlowerDeltaTime = sunFlowers[i]->sunoClock.restart().asSeconds();
+				SpawnSun(true,i);
+			}
+		}
+		
 	}
 	//if (g_deltaTime < g_fpsLimit) {
 	//	sleep(seconds(g_fpsLimit - g_deltaTime));
