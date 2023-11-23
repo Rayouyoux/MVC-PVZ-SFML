@@ -21,8 +21,8 @@ public:
     vector<string> readFileLines();
 
     // Statistics Methods
-    map<string, string> getStatsMap(vector<string> vsFileLines);
-    float getStat(map<string, string> mStats, string sStat);
+    map<string, float> getStatsMap(vector<string> vsFileLines);
+    float getStat(map<string, float> mStats, string sStat);
 
     // Level Methods
     int getInfoPos(vector<string> vsFileLines);

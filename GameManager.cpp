@@ -56,6 +56,9 @@ GameManager::GameManager() {
 	music->setVolume(10.0f);
 	music->setLoop(true);
 
+	FileManager manager("stats/stats.txt");
+	std::vector<std::string> vsFileLines = manager.readFileLines();
+	std::map<std::string, float> stats = manager.getStatsMap(vsFileLines);                         
 }
 
 /*
