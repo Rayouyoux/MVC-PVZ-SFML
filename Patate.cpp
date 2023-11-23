@@ -1,8 +1,8 @@
 #include "Patate.h"
 #include <iostream>
 
-Patate::Patate(int id) : Plante(id) {
-	SetHp(350);
+Patate::Patate(int id, float hp) : Plante(id) {
+	SetHp(hp);
 	SetSize(100, 100);
 	sf::Texture* m_texture = new sf::Texture();
 	if (!m_texture->loadFromFile("rsrc/img/sprite/plantes/Patate.png")) {

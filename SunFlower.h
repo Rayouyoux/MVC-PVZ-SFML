@@ -5,6 +5,6 @@ class SunFlower : public Plante
 {
 public:
 	int m_iRate;
-	SunFlower(int m_id);
+	SunFlower(int m_id, float rate);
 };
 

@@ -109,7 +109,7 @@ void GameManager::MoveZombies() {
 
 void GameManager::PlacePlante(int a) {
 	if (a == 1) {
-		Pistopois* oPlante = new Pistopois(1);
+		Pistopois* oPlante = new Pistopois(1, stats["pistopois_rate"], stats["pistopois_dmg"]);
 		plantes.push_back(oPlante);
 		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 			oPlante->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
@@ -126,7 +126,7 @@ void GameManager::PlacePlante(int a) {
 		}
 	}
 	else if (a == 2) {
-		Patate* oPlante = new Patate(2);
+		Patate* oPlante = new Patate(2, stats["patate_hp"]);
 		plantes.push_back(oPlante);
 		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 			oPlante->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
@@ -141,7 +141,7 @@ void GameManager::PlacePlante(int a) {
 		}
 	}
 	else if (a == 3) {
-		SunFlower* oPlante = new SunFlower(3);
+		SunFlower* oPlante = new SunFlower(3, stats["sunflower_rate"]);
 		sunFlowers.push_back(oPlante);
 		plantes.push_back(oPlante);
 		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
