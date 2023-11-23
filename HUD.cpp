@@ -43,9 +43,10 @@ Hud::Hud(GameWindow* window) {
 	m_playIcon->setPosition(window->GetWidth() - 250, window->GetHeight() / 2 - 100);
 }
 
-void	Hud::DrawHud(int money, int zombienum) {
+void	Hud::DrawHud(int money, int zombienum, bool isPlaying) {
 	m_window->w_window->draw(*m_moneyIcon);
-	m_window->w_window->draw(*m_playIcon);
+	if (!isPlaying)
+		m_window->w_window->draw(*m_playIcon);
 	m_money.setString(std::to_string(money));
 	m_window->w_window->draw(m_money);
 }

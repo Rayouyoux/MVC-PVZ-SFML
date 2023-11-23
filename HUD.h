@@ -27,7 +27,7 @@ public:
 
 	//Main Methods
 
-	void	DrawHud(int money, int zombienum);
+	void	DrawHud(int money, int zombienum, bool isPlaying);
 };
 
 

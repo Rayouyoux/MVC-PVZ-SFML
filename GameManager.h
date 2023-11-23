@@ -27,7 +27,8 @@ private:
 	sf::Clock	clock;
 	sf::Clock	pistoClock;
 	sf::Clock	sunoClock;
-
+	
+	bool		isPlaying;
 	bool		isDone;
 	bool		hasWon;
 	bool		hasLost;

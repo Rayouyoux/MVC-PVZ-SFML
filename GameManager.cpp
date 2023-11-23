@@ -26,7 +26,7 @@ GameManager* GameManager::pInstance = nullptr;
 
 GameManager::GameManager() {
 
-
+	isPlaying = false;
 	isDone = false;
 	hasWon = false;
 	hasLost = false;
@@ -235,7 +235,7 @@ void		GameManager::RenderGame() {
 			window->DrawObject(suns.at(i));
 		}
 	}
-	hud->DrawHud(money, 50);
+	hud->DrawHud(money, 50, isPlaying);
 	window->Display();
 }
 
@@ -489,7 +489,7 @@ void GameManager::HandleEvents() {
 				keypressed = false;
 			}
 			if (Mouse::isButtonPressed(Mouse::Button::Left) and IsOnPlay())
-				std::cout << "PLAY" << std::endl;
+				isPlaying = true;
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus() and IsOnSun(localposition));
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 				if (money >= 100 and typePlant == 1)
@@ -501,12 +501,15 @@ void GameManager::HandleEvents() {
 			}
 		}
 		LimitFps();
-		CheckColls();
-		MoveZombies();
-		CheckDefeat();
-		CheckVictory();
-		DeleteBullet();
-		DeleteSuns();
+		if (isPlaying)
+		{
+			CheckColls();
+			MoveZombies();
+			CheckDefeat();
+			CheckVictory();
+			DeleteBullet();
+			DeleteSuns();
+		}
 		RenderGame();
 	}
 	window->Clear();
