@@ -62,7 +62,7 @@ private:
 	// Main Methods
 
 	void		GenerateWave();
-	void		PlacePlante();
+	void		PlacePlante(int a);
 	void		SpawnSun();
 	void		SpawnZombie(float x, float y);
 	void		CheckColls();

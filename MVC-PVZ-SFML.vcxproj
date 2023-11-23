@@ -139,6 +139,7 @@
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Patate.cpp" />
     <ClCompile Include="Pistopois.cpp" />
     <ClCompile Include="Plante.cpp" />
     <ClCompile Include="Sun.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="HUD.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Patate.h" />
     <ClInclude Include="Pistopois.h" />
     <ClInclude Include="Plante.h" />
     <ClInclude Include="Sun.h" />
