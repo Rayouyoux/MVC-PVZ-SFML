@@ -1,10 +1,12 @@
 #pragma once
 
 #include <vector>
+#include <map>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "Bullet.h"
 #include "Pistopois.h"
+#include "FileManager.h"
 #include "EventManager.h"
 
 class GameWindow;
@@ -47,7 +49,7 @@ private:
 	std::vector<Plante*>	plantes;
 	std::vector<SunFlower*> sunFlowers;
 	std::vector<Pistopois*> pistopois;
-
+	std::map<std::string, float> stats;
 
 
 	std::vector<sf::String*>	wave;

@@ -22,19 +22,19 @@ vector<string> FileManager::readFileLines() {
     return sLines;
 }
 
-map<string, string> FileManager::getStatsMap(vector<string> vsFileLines) {
-    map<string, string> mStats;
+map<string, float> FileManager::getStatsMap(vector<string> vsFileLines) {
+    map<string, float> mStats;
 
     for (int i = 0; i < vsFileLines.size(); i++) {
         size_t iPos = vsFileLines[i].find(':');
-        mStats[vsFileLines[i].substr(0, iPos)] = vsFileLines[i].substr(iPos + 1);
+        mStats[vsFileLines[i].substr(0, iPos)] = stof(vsFileLines[i].substr(iPos + 1));
     }
 
     return mStats;
 }
 
-float FileManager::getStat(map<string, string> mStats, string sStat) {
-    return stof(mStats[sStat]);
+float FileManager::getStat(map<string, float> mStats, string sStat) {
+    return mStats[sStat];
 }
 
 int FileManager::getInfoPos(vector<string> vsFileLines) {

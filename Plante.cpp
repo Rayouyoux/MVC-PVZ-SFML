@@ -37,3 +37,11 @@ bool	Plante::GetPowerUpStatus() {
 int Plante::GetId() {
 	return m_id;
 }
+
+void Plante::SetHp(float hp) {
+	m_hp = hp;
+}
+
+void Plante::DecreaseLife(float value) {
+	m_hp -= value;
+}

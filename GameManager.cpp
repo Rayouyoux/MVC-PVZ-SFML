@@ -11,6 +11,7 @@
 #include "HUD.h"
 
 #include "Pistopois.h"
+#include "Patate.h"
 #include "SunFlower.h"
 #include "Zombie.h"
 #include "Sun.h"
@@ -57,6 +58,9 @@ GameManager::GameManager() {
 	music->setVolume(10.0f);
 	music->setLoop(true);
 
+	FileManager manager("stats/stats.txt");
+	std::vector<std::string> vsFileLines = manager.readFileLines();
+	std::map<std::string, float> stats = manager.getStatsMap(vsFileLines);                         
 }
 
 /*
@@ -110,13 +114,32 @@ void GameManager::PlacePlante(int a) {
 		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 			oPlante->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
 			RenderGame();
+
 		}
 		if (oPlante->CanBePlaced(window) == false) {
 			plantes.pop_back();
 		}
-		pistopois.push_back(oPlante);
-		money -= 100;
+		else
+		{
+			pistopois.push_back(oPlante);
+			money -= 100;
+		}
 	}
+	else if (a == 2) {
+		Patate* oPlante = new Patate(2);
+		plantes.push_back(oPlante);
+		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
+			oPlante->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
+			RenderGame();
+		}if (oPlante->CanBePlaced(window) == false) {
+			plantes.pop_back();
+		}
+		else
+		{
+			plantes.push_back(oPlante);
+			money -= 150;
+		}
+
 	else if (a == 3) {
 		SunFlower* oPlante = new SunFlower(3);
 		sunFlowers.push_back(oPlante);
@@ -128,11 +151,13 @@ void GameManager::PlacePlante(int a) {
 		if (oPlante->CanBePlaced(window) == false) {
 			plantes.pop_back();
 		}
-		money -= 100;
+		money -= 50;
 
 	}
 
 }
+
+
 
 void GameManager::PistopoisShoot() {
 	if (!pistopois.empty()) {
@@ -393,9 +418,13 @@ void GameManager::HandleEvents() {
 	int a = 0;
 	//eEventManager->Get()->AddComponent(sf::Event::EventType::MouseButtonPressed, sf::Mouse::Left, &EventPlacePlants(a));
 	sf::Clock	oClock;
+	int a = 0;
+	bool keypressed = false;
 
-	srand(time(NULL));
-	SpawnZombie(1980, 800);
+	srand(time(NULL)); 
+	SpawnZombie(1970, 800);
+	SpawnZombie(1980, 600);
+	SpawnZombie(1990, 400);
 	while (!isDone) {
 
 		while (window->w_window->pollEvent(event))
@@ -405,17 +434,44 @@ void GameManager::HandleEvents() {
 			sf::Vector2i localposition = sf::Mouse::getPosition(*window->w_window);
 			if (event.type == Event::Closed)
 				window->Close();
+			if (Keyboard::isKeyPressed(Keyboard::Num1)) {
+				if (a == 1 && keypressed == false) {
+					a = 0;
+					keypressed = true;
+				}
+				else if(a != 1 && keypressed == false) {
+					a = 1;
+					keypressed = true;
+				}
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Num2)) {
+				if (a == 2 && keypressed == false) {
+					a = 0;
+					keypressed = true;
+				}
+				else if (a != 2 && keypressed == false) {
+					a = 2;
+					keypressed = true;
+				}
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Num3)) {
+				if (a == 3 && keypressed == false) {
+					a = 0;
+					keypressed = true;
+				}
+				else if (a != 3 && keypressed == false) {
+					a = 3;
+					keypressed = true;
+				}
+			}
+			else if (Keyboard::isKeyPressed(Keyboard::Num1) == false && Keyboard::isKeyPressed(Keyboard::Num2) == false && Keyboard::isKeyPressed(Keyboard::Num3) == false) {
+				keypressed = false;
+			}
 			if (Mouse::isButtonPressed(Mouse::Button::Left) and IsOnPlay())
 				std::cout << "PLAY" << std::endl;
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus() and IsOnSun(localposition));
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 				if (money >= 100)
-					if (Keyboard::isKeyPressed(Keyboard::Num1)) {
-						a = 1;
-					}
-					else if (Keyboard::isKeyPressed(Keyboard::Num2)) {
-						a = 3;
-					}
 					PlacePlante(a);
 			}
 		}
@@ -437,16 +493,34 @@ void GameManager::HandleEvents() {
 
 }
 
-void	GameManager::CheckColls() {
-	for (int i = 0; i < bullets.size(); ++i) {
-		for (int j = 0; j < zombies.size(); ++j)
+void    GameManager::CheckColls() {
+
+	for (int i = 0; i < zombies.size(); ++i) {
+		for (int j = 0; j < bullets.size(); ++j)
 		{
-			if (zombies.at(j)->CheckCollision(bullets.at(i))) {
-				delete bullets[i];
-				bullets.erase(bullets.begin() + i);
-				if (zombies.at(j)->GetHp() <= 0) {
-					delete zombies[j];
-					zombies.erase(zombies.begin() + j);
+			if (zombies.at(i)->CheckCollision(bullets.at(j))) {
+				delete bullets[j];
+				bullets.erase(bullets.begin() + j);
+				zombies.at(i)->DecreaseLife(10);
+				if (zombies.at(i)->GetHp() <= 0) {
+					delete zombies[i];
+					zombies.erase(zombies.begin() + i);
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < zombies.size(); ++i) {
+		for (int j = 0; j < plantes.size(); ++j)
+		{
+			if (zombies.at(i)->CheckCollision(plantes.at(j))) {
+				zombies.at(i)->SetSpeed(0);
+				plantes.at(j)->DecreaseLife(0.003);
+				if (plantes.at(j)->GetHP() <= 0)
+				{
+					delete plantes[j];
+					plantes.erase(plantes.begin() + j);
+					zombies.at(i)->SetSpeed(3);
 				}
 			}
 		}

@@ -10,7 +10,7 @@ private:
 	// Main Attributes
 
 	int		m_id;
-	int		m_hp;
+	float		m_hp;
 	int		m_hpMax;
 	bool	m_powerAvailable;
 
@@ -25,7 +25,9 @@ public:
 	int		GetHP();
 	int		GetHPmax();
 	bool	GetPowerUpStatus();
-	int    GetId();
+	int		GetId();
+	void	SetHp(float hp);
+	void    DecreaseLife(float value);
 };
 
 
