@@ -5,20 +5,23 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
-#include "Bullet.h"
-#include "Pistopois.h"
 #include "FileManager.h"
 #include "LevelManager.h"
 #include "EventManager.h"
 
-typedef void(*func)();
 using namespace std;
+
+typedef void(*func)();
+
 class GameWindow;
+class Hud;
 class Zombie;
 class Plante;
+class Pistopois;
 class SunFlower;
+class Bullet;
 class Sun;
-class Hud;
+
 typedef void(*func)();
 
 class GameManager
@@ -27,41 +30,45 @@ private:
 
 	// Main Attributes
 
-	sf::Clock	clock;
-	sf::Clock	pistoClock;
-	sf::Clock	sunoClock;
-	float		fpsLimit;
-	
-	bool		isPlaying;
-	bool		isDone;
-	bool		hasWon;
-	bool		hasLost;
+	sf::Clock			clock;
+	sf::Clock			pistoClock;
+	sf::Clock			sunoClock;
+	float				fpsLimit;
 
-	float		sunRate;
-	float		fsunFlowerDeltaTime;
-	float		fsunDeltaTime;
-	float		fpistoDeltaTime;
-	float		fDeltaTime;
+	EventManager		*eEventManager;
+	
+	bool				isPlaying;
+	bool				isDone;
+	bool				hasWon;
+	bool				hasLost;
+
+	float				sunRate;
+	float				fsunFlowerDeltaTime;
+	float				fsunDeltaTime;
+	float				fpistoDeltaTime;
+	float				fDeltaTime;
+
 	// Window Attributes
 
-	GameWindow* window;
-	Hud* hud;
-	sf::Sprite* background;
-	sf::Music*	music;
+	GameWindow			*window;
+	Hud					*hud;
+	sf::Shape			*CurrentPlant;
+	sf::Sprite			*background;
+	sf::Music			*music;
 
-	sf::Shape *CurrentPlant;
+	
 
 	// Objects Attributes
-	EventManager* eEventManager;
 
-	int						money;
-	vector<Bullet*>	bullets;
+	int					money;
+	int					typePlant;
+	vector<Bullet*>		bullets;
 	vector<Sun*>		suns;
-	vector<Zombie*>	zombies;
-	vector<Plante*>	plantes;
-	vector<SunFlower*> sunFlowers;
-	vector<Pistopois*> pistopois;
-	map<string, float> stats;
+	vector<Zombie*>		zombies;
+	vector<Plante*>		plantes;
+	vector<SunFlower*>	sunFlowers;
+	vector<Pistopois*>	pistopois;
+	map<string, float>	stats;
 
 
 	vector<sf::String*>	wave;
@@ -71,11 +78,11 @@ public:
 
 	GameManager();
 
-	void		Start();
+	void				Start();
 
 	~GameManager();
 	static GameManager* pInstance;
-	static void Initialize()
+	static void			Initialize()
 	{
 		GameManager::pInstance = new GameManager();
 	}
@@ -83,44 +90,48 @@ public:
 	{
 		return pInstance;
 	}
-	int         typePlant;
-	void		PlacePlante();
+
+	// Plant Methods
+
+	void				PlacePlante();
 
 private:
-	
+
+	// Object Methods
+
+	void				SpawnWave();
+	void				GenerateWave();
+	void				MoveZombies();
+	void				SpawnZombie(float x, float y);
+	void				GenerateSuns();
+	void				SpawnSun(bool plant, int index);
+	void				SetCurrentPlant(float x, float y);
+	void				PistopoisShoot();
+	void				DeleteBullet();
+	void				DeleteSuns();
+
+	// Window Methods
+
+	void				RenderGame();
+	void				LoseScreen();
+	void				WinScreen();
+	void				Credits();
+	void				LimitFps();
+
+	// Check Methods
+
+	void				CheckColls();
+	bool				IsOnSun(sf::Vector2i localposition);
+	bool				IsOnPlay();
+	bool				IsOnPisto(sf::Vector2i localposition);
+	bool				IsOnPotatoe(sf::Vector2i localposition);
+	bool				IsOnSunflower(sf::Vector2i localposition);
+	void				CheckDefeat();
+	void				CheckVictory();
+
 	// Main Methods
 
-	void		GenerateWave();
+	void				HandleEvents();
 	
-	void		SpawnSun(bool plant, int index);
-
-	void		SpawnZombie(float x, float y);
-	void		CheckColls();
-
-	void		HandleEvents();
-	bool		IsOnSun(sf::Vector2i localposition);
-	bool		IsOnPlay();
-	bool		IsOnPisto(sf::Vector2i localposition);
-	bool		IsOnPotatoe(sf::Vector2i localposition);
-	bool		IsOnSunflower(sf::Vector2i localposition);
-	void		GenerateSuns();
-
-	void		RenderGame();
-	void		SetCurrentPlant(float x,float y);
-	void		CheckDefeat();
-	void		CheckVictory();
-
-	void		LoseScreen();
-	void		WinScreen();
-	void		Credits();
-
-	void		SpawnWave();
-	void		MoveZombies();
-
-	void        PistopoisShoot();
-	void		DeleteBullet();
-	void        DeleteSuns();
-
-	void		LimitFps();
 };
 

@@ -9,6 +9,8 @@ class Menu
 {
 private:
 
+	// Main attributes
+
 	bool		m_loop;
 
 	sf::Music	*m_music;
@@ -20,8 +22,8 @@ public:
 	Menu(GameWindow *window, sf::Music *music);
 
 
-	void	Start();
-	int		GetVolume();
+	void		Start();
+	int			GetVolume();
 
 	~Menu();
 
@@ -29,21 +31,22 @@ private:
 	
 	// Main Buttons
 
-	bool	ExitButton();
-	bool	OptionButton();
-	bool	StartButton();
-	void	InitOptions();
-	void	Options();
+	bool		ExitButton();
+	bool		OptionButton();
+	bool		StartButton();
+	void		InitOptions();
+	void		Options();
 
 	// Options Buttons
 
-	bool	OptionExitButton();
-	bool	OptionMenuButton();
-	bool	OptionMuteButton();
+	bool		OptionExitButton();
+	bool		OptionMenuButton();
+	bool		OptionMuteButton();
 
 
 	// Display related
-	void	Display();
-	void	Init();
+
+	void		Display();
+	void		Init();
 };
 

@@ -1,4 +1,11 @@
 #include "LevelManager.h"
+#include "Zombie.h"
+
+/*
+---------------------------------------------------------------------------------
+|							Here is the constructor								|
+---------------------------------------------------------------------------------
+*/
 
 LevelManager::LevelManager(int iLevel) {
 	string sLevelNumber = to_string(iLevel);
@@ -10,6 +17,12 @@ LevelManager::LevelManager(int iLevel) {
 	m_mLevelInfo = oLevel.getLevelInfoMap(vsFileLines);
 	m_mLevelWaves = oLevel.getLevelWavesMap(vsFileLines);
 }
+
+/*
+---------------------------------------------------------------------------------
+|							Here are the main methods							|
+---------------------------------------------------------------------------------
+*/
 
 void LevelManager::createLevel(vector<Zombie*> *voZombies) {
 	float fSpawnPosX = 1920;

@@ -9,19 +9,30 @@ class Pistopois : public Plante
 {
 private:
 	
-	float m_damage;
+	float		m_damage;
+
 public:
+
+	// Main attributes
+
 	float		m_rate;
 	sf::Clock	pistopoisoClock;
+
+
 	Pistopois(int id, float rate, float dmg);
 
-	void		SetRate(float r);
+	// Set methods
 
+	void		SetRate(float r);
 	void		SetDamage(float d);
+
+	// Get methods
 
 	float		GetRate();
 	
 	float		GetDamage();
+
+	// Main methods
 
 	void		Shoot(std::vector<Bullet*>* bullets);
 

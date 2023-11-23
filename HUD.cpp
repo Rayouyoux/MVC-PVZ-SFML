@@ -5,6 +5,12 @@
 
 #include "GameWindow.h"
 
+/*
+---------------------------------------------------------------------------------
+|						Here is the constructeur								|
+---------------------------------------------------------------------------------
+*/
+
 Hud::Hud(GameWindow* window) {
 
 	m_window = window;
@@ -53,6 +59,12 @@ Hud::Hud(GameWindow* window) {
 	m_playIcon->setTexture(*m_playtexture);
 	m_playIcon->setPosition(window->GetWidth() - 250, window->GetHeight() / 2 - 100);
 }
+
+/*
+---------------------------------------------------------------------------------
+|				Here are all the main methods									|
+---------------------------------------------------------------------------------
+*/
 
 void	Hud::DrawHud(int money, int zombienum, bool isPlaying) {
 	m_window->w_window->draw(*m_moneyIcon);

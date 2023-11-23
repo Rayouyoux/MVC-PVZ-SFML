@@ -5,6 +5,12 @@
 
 #include "GameWindow.h"
 
+/*
+---------------------------------------------------------------------------------
+|							Here is the constructor								|
+---------------------------------------------------------------------------------
+*/
+
 Menu::Menu(GameWindow* window, Music* music) {
 	m_loop = true;
 
@@ -20,7 +26,7 @@ int	Menu::GetVolume() {
 
 /*
 ---------------------------------------------------------------------------------
-|				Here are all the options methods								|
+|					Here are all the options methods							|
 ---------------------------------------------------------------------------------
 */
 
@@ -116,8 +122,6 @@ bool Menu::OptionButton() {
 		return true;
 	return false;
 }
-
-
 
 
 bool Menu::StartButton() {

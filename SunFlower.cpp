@@ -1,6 +1,12 @@
 #include "SunFlower.h"
 #include <iostream>
 
+/*
+---------------------------------------------------------------------------------
+|							Here is the constructor								|
+---------------------------------------------------------------------------------
+*/
+
 SunFlower::SunFlower(int m_id, float rate) : Plante(m_id) {
 	m_iRate = rate;
 	SetSize(100, 100);

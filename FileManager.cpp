@@ -1,8 +1,21 @@
 #include "FileManager.h"
+
 #include <iostream>
 #include <fstream>
 
+/*
+---------------------------------------------------------------------------------
+|							Here is the constructor								|
+---------------------------------------------------------------------------------
+*/
+
 FileManager::FileManager(const string& sFilePath) : m_sFilePath(sFilePath) {}
+
+/*
+---------------------------------------------------------------------------------
+|						Here is the file reading method						    |
+---------------------------------------------------------------------------------
+*/
 
 vector<string> FileManager::readFileLines() {
     vector<string> sLines;
@@ -22,6 +35,12 @@ vector<string> FileManager::readFileLines() {
     return sLines;
 }
 
+/*
+---------------------------------------------------------------------------------
+|					    Here are the statistics methods							|
+---------------------------------------------------------------------------------
+*/
+
 map<string, float> FileManager::getStatsMap(vector<string> vsFileLines) {
     map<string, float> mStats;
 
@@ -36,6 +55,12 @@ map<string, float> FileManager::getStatsMap(vector<string> vsFileLines) {
 float FileManager::getStat(map<string, float> mStats, string sStat) {
     return mStats[sStat];
 }
+
+/*
+---------------------------------------------------------------------------------
+|					      Here are the level methods							|
+---------------------------------------------------------------------------------
+*/
 
 int FileManager::getInfoPos(vector<string> vsFileLines) {
     int iIndex = 0;

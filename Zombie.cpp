@@ -2,10 +2,18 @@
 
 #include <iostream>
 
+
+/*
+---------------------------------------------------------------------------------
+|							Here is the constructor								|
+---------------------------------------------------------------------------------
+*/
+
 Zombie::Zombie(int m_id) : GameObject() {
 	m_Speed = 0;
 	m_vDirection;
 	m_vDirection.push_back(-1);
+	m_Idle = false;
 
 	sf::Texture* m_texture = new sf::Texture();
 	if (m_id == 1) {
@@ -27,6 +35,12 @@ Zombie::Zombie(int m_id) : GameObject() {
 	m_sprite->setOrigin(GetSize().x / 2, GetSize().y / 2);
 }
 
+/*
+---------------------------------------------------------------------------------
+|							Here are the get methods							|
+---------------------------------------------------------------------------------
+*/
+
 float		Zombie::GetHp() {
 	return m_Hp;
 }
@@ -38,6 +52,30 @@ float		Zombie::GetSpeed() {
 float		Zombie::GetDmg() {
 	return m_Damage;
 }
+
+/*
+---------------------------------------------------------------------------------
+|							Here are the set methods							|
+---------------------------------------------------------------------------------
+*/
+
+void Zombie::setStats(float fSpeed, float fHp, float fMaxHp, float fDamage) {
+	m_Speed = fSpeed;
+	m_CurrentSpeed = fSpeed;
+	m_Hp = fHp;
+	m_HpMax = fMaxHp;
+	m_Damage = fDamage;
+}
+
+void    Zombie::SetSpeed(int value) {
+	m_CurrentSpeed = value;
+}
+
+/*
+---------------------------------------------------------------------------------
+|							Here are the main methods							|
+---------------------------------------------------------------------------------
+*/
 
 void Zombie::DecreaseLife(float value) {
 	m_Hp -= value;
@@ -53,18 +91,11 @@ bool Zombie::CheckCollision(GameObject* object) {
 }
 
 void Zombie::move(float fDeltaTime) {
-	m_position.x -= 10 * fDeltaTime * m_CurrentSpeed;
-	SetPosition(m_position.x, m_position.y);
+	if(m_Idle == false){
+		m_position.x -= 10 * fDeltaTime * m_CurrentSpeed;
+		SetPosition(m_position.x, m_position.y);
+	}
+
 }
 
-void Zombie::setStats(float fSpeed, float fHp, float fMaxHp, float fDamage) {
-	m_Speed = fSpeed;
-	m_CurrentSpeed = fSpeed;
-	m_Hp = fHp;
-	m_HpMax = fMaxHp;
-	m_Damage = fDamage;
-}
 
-void    Zombie::SetSpeed(int value) {
-	m_CurrentSpeed = value;
-}

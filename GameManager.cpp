@@ -1,10 +1,10 @@
 #include "GameManager.h"
 
 #include <iostream>
-#include "time.h"
 #include <SFML/System/Sleep.hpp>
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "time.h"
 
 #include "GameWindow.h"
 #include "Menu.h"
@@ -76,7 +76,47 @@ GameManager::GameManager() {
 |					Here are all the objects methods							|
 ---------------------------------------------------------------------------------
 */
-void GameManager::SpawnSun(bool plant, int index) {
+
+void	GameManager::GenerateWave() {
+	float	x = 1920;
+	float	y = 80;
+	int		sizeX = wave.at(0)->getSize();
+	int		sizeY = wave.size();
+
+	for (int i = 0; i < sizeY; ++i) {
+		for (int j = 0; j < sizeX; ++j) {
+			if (wave.at(i)[j] != '-') {
+				SpawnZombie(x, y);
+			}
+			x += (60);
+		}
+		x = 60;
+		y += 60;
+	}
+	if (zombies.empty())
+	{
+		std::cout << "Error Generating Terrain. Terrain must not be empty" << std::endl;
+		exit(1);
+	}
+}
+
+void	GameManager::GenerateSuns() {
+	if (sunoClock.getElapsedTime().asSeconds() >= sunRate) {
+		fsunDeltaTime = sunoClock.restart().asSeconds();
+		SpawnSun(false, 0);
+	}
+	else if (!sunFlowers.empty()) {
+		for (int i = 0; i < sunFlowers.size(); i++) {
+			if (sunFlowers[i]->sunoClock.getElapsedTime().asSeconds() >= sunFlowers[i]->m_iRate) {
+				fsunFlowerDeltaTime = sunFlowers[i]->sunoClock.restart().asSeconds();
+				SpawnSun(true, i);
+			}
+		}
+
+	}
+}
+
+void	GameManager::SpawnSun(bool plant, int index) {
 
 
 	int xPos = 0;
@@ -91,18 +131,16 @@ void GameManager::SpawnSun(bool plant, int index) {
 		
 	}
 	else {
-		//for (int i = 0; i < sunFlowers.size(); i++) {
-			int xPos = sunFlowers[index]->GetPosition().x;
-			int y = sunFlowers[index]->GetPosition().y;
-			oSun->SetSpeed(0);
-			suns.push_back(oSun);
-			oSun->SetPosition(xPos, y);
-		//}
+		int xPos = sunFlowers[index]->GetPosition().x;
+		int y = sunFlowers[index]->GetPosition().y;
+		oSun->SetSpeed(0);
+		suns.push_back(oSun);
+		oSun->SetPosition(xPos, y);
 		
 	}
 }
 
-void GameManager::DeleteSuns() {
+void	GameManager::DeleteSuns() {
 	if (!suns.empty()) {
 		for (int i = 0; i < suns.size(); i++) {
 			if (suns[i]->GetPosition().y > window->GetHeight()) {
@@ -112,14 +150,14 @@ void GameManager::DeleteSuns() {
 		}
 	}
 }
-void GameManager::SpawnZombie(float x, float y) {
+void	GameManager::SpawnZombie(float x, float y) {
 	Zombie* oZombie = new Zombie(2);
 	oZombie->SetPosition(x, y);
 	zombies.push_back(oZombie);
 
 }
 
-void GameManager::MoveZombies() {
+void	GameManager::MoveZombies() {
 	if (!zombies.empty()) {
 		for (int i = 0; i < zombies.size(); ++i) {
 			zombies.at(i)->move(fDeltaTime);
@@ -127,8 +165,12 @@ void GameManager::MoveZombies() {
 	}
 }
 
-void GameManager::PlacePlante() {
-	//std::cout << "typePlant == " << typePlant << std::endl;
+void	GameManager::SpawnWave() {
+	LevelManager	Wave(1);
+	Wave.createLevel(&zombies);
+}
+
+void	GameManager::PlacePlante() {
 	if (typePlant == 1) {
 		Pistopois* oPlante = new Pistopois(1, stats["pistopois_rate"], stats["pistopois_dmg"]);
 		plantes.push_back(oPlante);
@@ -179,7 +221,7 @@ void GameManager::PlacePlante() {
 	}
 }
 
-void GameManager::PistopoisShoot() {
+void	GameManager::PistopoisShoot() {
 	for (int i = 0; i < pistopois.size(); i++) {
 		if (pistopois[i]->pistopoisoClock.getElapsedTime().asSeconds() >= pistopois[i]->m_rate) {
 			fpistoDeltaTime = pistopois[i]->pistopoisoClock.restart().asSeconds();
@@ -190,7 +232,7 @@ void GameManager::PistopoisShoot() {
 	}
 }
 
-void GameManager::DeleteBullet() {
+void	GameManager::DeleteBullet() {
 	if (!bullets.empty()) {
 		for (int i = 0; i < bullets.size(); i++) {
 			if (bullets[i]->GetPosition().x > window->GetWidth()) {
@@ -200,24 +242,38 @@ void GameManager::DeleteBullet() {
 		}
 	}
 }
-void EventPlacePlants()
+
+void	GameManager::SetCurrentPlant(float x, float y) {
+	CurrentPlant->setPosition(x, y);
+}
+
+void	EventPlacePlants()
 {
 	GameManager::Get()->PlacePlante();
 }
 /*
 ---------------------------------------------------------------------------------
-|				Here are all Rendering related methods							|
+|					Here are all the window methods								|
 ---------------------------------------------------------------------------------
 */
 
-void		GameManager::RenderGame() {
+void	GameManager::LimitFps() {
+	fDeltaTime = clock.restart().asSeconds();
+
+	//if (fDeltaTime < fpsLimit) {
+	//	sleep(seconds(fpsLimit - fDeltaTime));
+	//	fDeltaTime += fpsLimit - fDeltaTime;
+	//}
+
+}
+
+void	GameManager::RenderGame() {
 	window->Clear();
 	window->w_window->draw(*background);
 	if (!plantes.empty()) {
 		for (int i = 0; i < plantes.size(); ++i)
 			window->DrawObject(plantes.at(i));
 	}
-	// à bouger dans le moove zombie
 	if (!bullets.empty()) {
 		for (int i = 0; i < bullets.size(); i++) {
 			bullets[i]->Move(fDeltaTime);
@@ -242,86 +298,7 @@ void		GameManager::RenderGame() {
 	window->Display();
 }
 
-void		GameManager::SetCurrentPlant(float x,float y){
-	CurrentPlant->setPosition(x,y);
-}
-
-/*
----------------------------------------------------------------------------------
-|					Here are all the main methods								|
----------------------------------------------------------------------------------
-*/
-
-void		GameManager::Start() {
-	Menu	menu(window, music);
-
-	menu.Start();
-
-	music->play();
-	music->setVolume(menu.GetVolume());
-	sf::sleep(sf::milliseconds(200));
-	window->Clear();
-	while (!isDone)
-	{
-		HandleEvents();
-	}
-}
-
-GameManager::~GameManager() {
-	plantes.clear();
-	music->stop();
-	delete music;
-}
-
-
-
-void GameManager::CheckDefeat() {
-	for (int i = 0; i < zombies.size(); ++i) {
-		if (zombies[i]->GetPosition().x < 0.2 * window->GetWidth()) {
-			hasLost = true;
-			isDone = true;
-		}
-	}
-}
-
-void GameManager::CheckVictory() {
-	
-	if (zombies.empty()) {
-		hasWon = true;
-		isDone = true;
-	}
-}
-/*
----------------------------------------------------------------------------------
-|								A bouger										|
----------------------------------------------------------------------------------
-*/
-
-bool GameManager::IsOnPlay() {
-	if (window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x > 0.876 * window->GetWidth() and \
-		window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x < 0.96 * window->GetWidth() and \
-		window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y > 0.455 * window->GetHeight() and \
-		window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y < 0.52 * window->GetHeight())
-		return true;
-	return false;
-}
-
-bool GameManager::IsOnSun(sf::Vector2i localposition) {
-	bool gotSun;
-
-	gotSun = false;
-	for (int i = 0; i < suns.size(); i++) {
-		if (((suns[i]->GetPosition().x - suns[i]->GetSize().x / 2) < localposition.x && (suns[i]->GetPosition().x + suns[i]->GetSize().x / 2) > localposition.x)
-			&& ((suns[i]->GetPosition().y - suns[i]->GetSize().y / 2) < localposition.y && (suns[i]->GetPosition().y + suns[i]->GetSize().y / 2) > localposition.y)) {
-			money += suns[i]->m_value;
-			suns.erase(suns.begin() + i);
-			gotSun = true;
-		}
-	}
-	return gotSun;
-}
-
-void GameManager::LoseScreen() {
+void	GameManager::LoseScreen() {
 	sf::Texture loseTexture;
 	sf::Sprite	lose;
 	Event		event;
@@ -359,7 +336,7 @@ void GameManager::LoseScreen() {
 	music->stop();
 }
 
-void GameManager::WinScreen() {
+void	GameManager::WinScreen() {
 	sf::Texture winTexture;
 	sf::Sprite	win;
 	Event		event;
@@ -397,7 +374,7 @@ void GameManager::WinScreen() {
 	music->stop();
 }
 
-void GameManager::Credits() {
+void	GameManager::Credits() {
 	sf::Texture creditsTexture;
 	sf::Sprite	credits;
 	Event		event;
@@ -442,41 +419,137 @@ void GameManager::Credits() {
 	music->stop();
 }
 
+/*
+---------------------------------------------------------------------------------
+|					Here are all the check methods								|
+---------------------------------------------------------------------------------
+*/
+
+void    GameManager::CheckColls() {
+	bool ZombieExist = true;
+
+	for (int i = 0; i < zombies.size(); ++i) {
+		for (int j = 0; j < plantes.size(); ++j)
+		{
+			if (zombies.at(i)->CheckCollision(plantes.at(j))) {
+				zombies.at(i)->m_Idle = true;
+				plantes.at(j)->DecreaseLife(zombies.at(i)->GetDmg() * fDeltaTime);
+				std::cout << plantes.at(j)->GetHP() << std::endl;
+				if (plantes.at(j)->GetHP() <= 0)
+				{
+					delete plantes[j];
+					plantes.erase(plantes.begin() + j);
+					zombies.at(i)->m_Idle = false;
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < zombies.size(); ++i) {
+		for (int j = 0; j < bullets.size(); ++j)
+		{
+			if (ZombieExist)
+			{
+				if (zombies.at(i)->CheckCollision(bullets.at(j))) {
+					delete bullets[j];
+					bullets.erase(bullets.begin() + j);
+					zombies.at(i)->DecreaseLife(10);
+					if (zombies.at(i)->GetHp() <= 0) {
+						delete zombies[i];
+						zombies.erase(zombies.begin() + i);
+						ZombieExist = false;
+					}
+				}
+			}
+		}
+		ZombieExist = true;
+	}
+
+
+}
+
 bool	GameManager::IsOnPisto(sf::Vector2i localposition) {
 	if (localposition.x >= 80 and localposition.x <= 280 and localposition.y >= 200 and localposition.y <= 428)
-	{
-		std::cout << "IsOnPisto" << std::endl;
 		return true;
-	}
 	return false;
 }
 
 bool	GameManager::IsOnPotatoe(sf::Vector2i localposition) {
 	if (localposition.x >= 80 and localposition.x <= 280 and localposition.y >= 657 and localposition.y <= 884)
-	{
-		std::cout << "IsOnPotatoe" << std::endl;
 		return true;
-	}
 	return false;
 }
 
 bool	GameManager::IsOnSunflower(sf::Vector2i localposition) {
 	if (localposition.x >= 80 and localposition.x <= 280 and localposition.y >= 429 and localposition.y <= 656)
-	{
-		std::cout << "IsOnSunflower" << std::endl;
 		return true;
-	}
 	return false;
 }
 
-void	GameManager::SpawnWave() {
-	LevelManager	Wave(1);
-	std::cout << "AVANT" << std::endl;
-	Wave.createLevel(&zombies);
-	std::cout << "Apres" << std::endl;
+bool	GameManager::IsOnPlay() {
+	if (window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x > 0.876 * window->GetWidth() and \
+		window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x < 0.96 * window->GetWidth() and \
+		window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y > 0.455 * window->GetHeight() and \
+		window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y < 0.52 * window->GetHeight())
+		return true;
+	return false;
 }
 
-void GameManager::HandleEvents() {
+bool	GameManager::IsOnSun(sf::Vector2i localposition) {
+	bool gotSun;
+
+	gotSun = false;
+	for (int i = 0; i < suns.size(); i++) {
+		if (((suns[i]->GetPosition().x - suns[i]->GetSize().x / 2) < localposition.x && (suns[i]->GetPosition().x + suns[i]->GetSize().x / 2) > localposition.x)
+			&& ((suns[i]->GetPosition().y - suns[i]->GetSize().y / 2) < localposition.y && (suns[i]->GetPosition().y + suns[i]->GetSize().y / 2) > localposition.y)) {
+			money += suns[i]->m_value;
+			suns.erase(suns.begin() + i);
+			gotSun = true;
+		}
+	}
+	return gotSun;
+}
+
+void	GameManager::CheckDefeat() {
+	for (int i = 0; i < zombies.size(); ++i) {
+		if (zombies[i]->GetPosition().x < 0.2 * window->GetWidth()) {
+			hasLost = true;
+			isDone = true;
+		}
+	}
+}
+
+void	GameManager::CheckVictory() {
+
+	if (zombies.empty()) {
+		hasWon = true;
+		isDone = true;
+	}
+}
+
+/*
+---------------------------------------------------------------------------------
+|					Here are all the main methods								|
+---------------------------------------------------------------------------------
+*/
+
+void	GameManager::Start() {
+	Menu	menu(window, music);
+
+	menu.Start();
+
+	music->play();
+	music->setVolume(menu.GetVolume());
+	sf::sleep(sf::milliseconds(200));
+	window->Clear();
+	while (!isDone)
+	{
+		SpawnWave();
+		HandleEvents();
+	}
+}
+
+void	GameManager::HandleEvents() {
 	Event		event;
 	EventManager::Initialize();
 	eEventManager->Get()->AddComponent(sf::Event::EventType::MouseButtonPressed, sf::Mouse::Left, &EventPlacePlants);
@@ -485,7 +558,7 @@ void GameManager::HandleEvents() {
 	typePlant = 0;
 
 	srand(time(NULL)); 
-	SpawnWave();
+	//SpawnWave();
 	while (!isDone) {
 		
 
@@ -574,94 +647,8 @@ void GameManager::HandleEvents() {
 
 }
 
-void    GameManager::CheckColls() {
-	bool ZombieExist = true;
-
-	for (int i = 0; i < zombies.size(); ++i) {
-		for (int j = 0; j < bullets.size(); ++j)
-		{
-			if (ZombieExist)
-			{
-				if (zombies.at(i)->CheckCollision(bullets.at(j))) {
-					delete bullets[j];
-					bullets.erase(bullets.begin() + j);
-					zombies.at(i)->DecreaseLife(10);
-					if (zombies.at(i)->GetHp() <= 0) {
-						delete zombies[i];
-						zombies.erase(zombies.begin() + i);
-						ZombieExist = false;
-					}
-				}
-			}
-		}
-		ZombieExist = true;
-	}
-
-	for (int i = 0; i < zombies.size(); ++i) {
-		for (int j = 0; j < plantes.size(); ++j)
-		{
-			if (zombies.at(i)->CheckCollision(plantes.at(j))) {
-				zombies.at(i)->SetSpeed(0);
-				plantes.at(j)->DecreaseLife(zombies.at(i)->GetDmg() * fDeltaTime);
-				std::cout << plantes.at(j)->GetHP() << std::endl;
-				if (plantes.at(j)->GetHP() <= 0)
-				{
-					delete plantes[j];
-					plantes.erase(plantes.begin() + j);
-					zombies.at(i)->SetSpeed(zombies.at(i)->GetSpeed());
-				}
-			}
-		}
-	}
+GameManager::~GameManager() {
+	plantes.clear();
+	music->stop();
+	delete music;
 }
-
-void	GameManager::GenerateWave() {
-	float	x = 1920;
-	float	y = 80;
-	int		sizeX = wave.at(0)->getSize();
-	int		sizeY = wave.size();
-
-	for (int i = 0; i < sizeY; ++i) {
-		for (int j = 0; j < sizeX; ++j) {
-			if (wave.at(i)[j] != '-') {
-				SpawnZombie(x, y);
-			}
-			x += (60);
-		}
-		x = 60;
-		y += 60;
-	}
-	if (zombies.empty())
-	{
-		std::cout << "Error Generating Terrain. Terrain must not be empty" << std::endl;
-		exit(1);
-	}
-}
-
-void GameManager::GenerateSuns() {
-	if (sunoClock.getElapsedTime().asSeconds() >= sunRate) {
-		fsunDeltaTime = sunoClock.restart().asSeconds();
-		SpawnSun(false, 0);
-	}
-	else if (!sunFlowers.empty()) {
-		for (int i = 0; i < sunFlowers.size(); i++) {
-			if (sunFlowers[i]->sunoClock.getElapsedTime().asSeconds() >= sunFlowers[i]->m_iRate) {
-				fsunFlowerDeltaTime = sunFlowers[i]->sunoClock.restart().asSeconds();
-				SpawnSun(true, i);
-			}
-		}
-
-	}
-}
-
-void GameManager::LimitFps() {
-	fDeltaTime = clock.restart().asSeconds();
-
-	//if (fDeltaTime < fpsLimit) {
-	//	sleep(seconds(fpsLimit - fDeltaTime));
-	//	fDeltaTime += fpsLimit - fDeltaTime;
-	//}
-
-}
-
-

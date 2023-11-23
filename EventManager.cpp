@@ -1,4 +1,5 @@
 #include "EventManager.h"
+
 #include <iostream>
 
 EventManager* EventManager::eInstance = nullptr;

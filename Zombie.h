@@ -5,8 +5,12 @@
 class Zombie : public GameObject
 {
 private:
+
+    // Main Attributes
+
     int                     m_CurrentSpeed;
     int                     m_Speed;
+    
     int                     m_Hp;
     int                     m_HpMax;
     float                   m_Damage;
@@ -14,15 +18,24 @@ private:
 
 public:
 
+	bool                    m_Idle;
+
 	Zombie(int m_id);
 
-    void    SetSpeed(int value);
-    float   GetHp();
-    float   GetDmg();
-    float	GetSpeed();
-    void    DecreaseLife(float value);
-    bool    CheckCollision(GameObject* object);
-    void    setStats(float fSpeed, float fHp, float fMaxHp, float fDamage);
+    // Get Methods
 
-    void    move(float fDeltaTime);
+    float                   GetHp();
+    float                   GetDmg();
+    float	                GetSpeed();
+
+    // Set Methods
+
+    void                    SetSpeed(int value);
+    void                    setStats(float fSpeed, float fHp, float fMaxHp, float fDamage);
+
+    // Main Methods
+   
+    void                    DecreaseLife(float value);
+    bool                    CheckCollision(GameObject* object);
+    void                    move(float fDeltaTime);
 };

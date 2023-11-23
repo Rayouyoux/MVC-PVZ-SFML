@@ -1,4 +1,5 @@
 #pragma once
+
 #include "GameObject.h"
 
 class GameWindow;
@@ -10,7 +11,7 @@ private:
 	// Main Attributes
 
 	int		m_id;
-	float		m_hp;
+	float	m_hp;
 	int		m_hpMax;
 	bool	m_powerAvailable;
 
@@ -18,15 +19,20 @@ public:
 
 	Plante(int id);
 
-	// Main Methods
-	
-	bool	CanBePlaced(GameWindow* window);
-	void		SetHP(int hp);
+	// Get methods
+
 	int		GetHP();
 	int		GetHPmax();
 	bool	GetPowerUpStatus();
 	int		GetId();
+
+	// Set methods
+
 	void	SetHp(float hp);
+
+	// Main methods
+	
+	bool	CanBePlaced(GameWindow* window);
 	void    DecreaseLife(float value);
 };
 

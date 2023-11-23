@@ -1,27 +1,30 @@
 #pragma once
+
 #include "SFML/Graphics.hpp"
 
-namespace sf {
-	class Sprite;
-}
 class GameObject
 {
 private:
 
-	sf::Vector2f m_size;
+	sf::Vector2f	m_size;
 
 public:
-	sf::Vector2f m_position;
-	sf::Sprite* m_sprite;
+
+	// Main attributes
+
+	sf::Vector2f	m_position;
+	sf::Sprite*		m_sprite;
 
 	GameObject();
 
-	void SetPosition(float x, float y);
+	// Set Methods
 
-	void SetSize(float w, float h);
+	void			SetPosition(float x, float y);
+	void			SetSize(float w, float h);
 
-	sf::Vector2f GetPosition();
+	// Get Methods
 
-	sf::Vector2f GetSize();
+	sf::Vector2f	GetPosition();
+	sf::Vector2f	GetSize();
 };
 

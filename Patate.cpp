@@ -1,5 +1,12 @@
 #include "Patate.h"
+
 #include <iostream>
+
+/*
+---------------------------------------------------------------------------------
+|					Here is the constructor of the patate						|
+---------------------------------------------------------------------------------
+*/
 
 Patate::Patate(int id, float hp) : Plante(id) {
 	SetHp(hp);

@@ -7,7 +7,6 @@
 
 GameWindow::GameWindow() {
 
-	// Main Attributes
 
 	width = 1920.f;
 	height = 1080.f;

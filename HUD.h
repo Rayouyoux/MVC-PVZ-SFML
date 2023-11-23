@@ -9,6 +9,7 @@ class Hud
 private:
 
 	// Main Attributes
+
 	sf::Font					m_font;
 	GameWindow*					m_window;
 
