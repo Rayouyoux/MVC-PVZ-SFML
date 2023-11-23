@@ -168,7 +168,6 @@ void GameManager::PlacePlante() {
 		}
 		if (oPlante->CanBePlaced(window) == false) {
 			plantes.pop_back();
-			sunFlowers.pop_back();
 		}
 		else {
 			sunFlowers.push_back(oPlante);
@@ -181,8 +180,6 @@ void GameManager::PlacePlante() {
 	}
 
 }
-
-
 
 void GameManager::PistopoisShoot() {
 	if (!pistopois.empty()) {
@@ -523,20 +520,26 @@ void GameManager::HandleEvents() {
 }
 
 void    GameManager::CheckColls() {
+	bool ZombieExist = true;
 
 	for (int i = 0; i < zombies.size(); ++i) {
 		for (int j = 0; j < bullets.size(); ++j)
 		{
-			if (zombies.at(i)->CheckCollision(bullets.at(j))) {
-				delete bullets[j];
-				bullets.erase(bullets.begin() + j);
-				zombies.at(i)->DecreaseLife(10);
-				if (zombies.at(i)->GetHp() <= 0) {
-					delete zombies[i];
-					zombies.erase(zombies.begin() + i);
+			if (ZombieExist)
+			{
+				if (zombies.at(i)->CheckCollision(bullets.at(j))) {
+					delete bullets[j];
+					bullets.erase(bullets.begin() + j);
+					zombies.at(i)->DecreaseLife(10);
+					if (zombies.at(i)->GetHp() <= 0) {
+						delete zombies[i];
+						zombies.erase(zombies.begin() + i);
+						ZombieExist = false;
+					}
 				}
 			}
 		}
+		ZombieExist = true;
 	}
 
 	for (int i = 0; i < zombies.size(); ++i) {
@@ -544,7 +547,8 @@ void    GameManager::CheckColls() {
 		{
 			if (zombies.at(i)->CheckCollision(plantes.at(j))) {
 				zombies.at(i)->SetSpeed(0);
-				plantes.at(j)->DecreaseLife(0.003);
+				plantes.at(j)->DecreaseLife(zombies.at(i)->GetDmg() * fDeltaTime);
+				std::cout << plantes.at(j)->GetHP() << std::endl;
 				if (plantes.at(j)->GetHP() <= 0)
 				{
 					delete plantes[j];

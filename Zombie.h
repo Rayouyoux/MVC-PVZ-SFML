@@ -16,7 +16,8 @@ public:
 	Zombie(int m_id);
 
     void    SetSpeed(int value);
-    float        GetHp();
+    float   GetHp();
+    float   GetDmg();
     void    DecreaseLife(float value);
     bool    CheckCollision(GameObject* object);
     void    setStats(float fSpeed, float fHp, float fMaxHp, float fDamage);

@@ -6,7 +6,7 @@ Zombie::Zombie(int m_id) : GameObject() {
 	m_Speed = 3;
 	m_Hp = 50;
 	m_HpMax = 50;
-	m_Damage = 50;
+	m_Damage = 10;
 	m_vDirection;
 	m_vDirection.push_back(-1);
 
@@ -32,6 +32,10 @@ Zombie::Zombie(int m_id) : GameObject() {
 
 float		Zombie::GetHp() {
 	return m_Hp;
+}
+
+float		Zombie::GetDmg() {
+	return m_Damage;
 }
 
 void Zombie::DecreaseLife(float value) {
