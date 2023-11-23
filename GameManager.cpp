@@ -11,6 +11,7 @@
 #include "HUD.h"
 
 #include "Pistopois.h"
+#include "Patate.h"
 #include "Zombie.h"
 #include "Sun.h"
 
@@ -90,22 +91,40 @@ void GameManager::MoveZombies() {
 	}
 }
 
-void GameManager::PlacePlante() {
-	Pistopois* oPistopois = new Pistopois(1);
+void GameManager::PlacePlante(int a) {
+	if (a == 1) {
+		Pistopois* oPlante = new Pistopois(1);
+		plantes.push_back(oPlante);
+		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
+			oPlante->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
+			RenderGame();
 
-	plantes.push_back(oPistopois);
+		}
+		if (oPlante->CanBePlaced(window) == false) {
+			plantes.pop_back();
+		}
+		else
+		{
+			pistopois.push_back(oPlante);
+			money -= 100;
+		}
+	}
+	else if (a == 2) {
+		Patate* oPlante = new Patate(2);
+		plantes.push_back(oPlante);
+		while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
+			oPlante->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
+			RenderGame();
 
-	while (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
-		oPistopois->SetPosition(window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).x, window->w_window->mapPixelToCoords(Mouse::getPosition(*window->w_window)).y);
-		RenderGame();
-	}
-	if (oPistopois->CanBePlaced(window) == false) {
-		plantes.pop_back();
-	}
-	else
-	{
-		pistopois.push_back(oPistopois);
-		money -= 100;
+		}
+		if (oPlante->CanBePlaced(window) == false) {
+			plantes.pop_back();
+		}
+		else
+		{
+			plantes.push_back(oPlante);
+			money -= 150;
+		}
 	}
 }
 
@@ -361,6 +380,8 @@ void GameManager::Credits() {
 void GameManager::HandleEvents() {
 	Event		event;
 	sf::Clock	oClock;
+	int a = 0;
+	bool keypressed = false;
 
 	srand(time(NULL));
 	SpawnZombie(1980, 800);
@@ -373,12 +394,45 @@ void GameManager::HandleEvents() {
 			sf::Vector2i localposition = sf::Mouse::getPosition(*window->w_window);
 			if (event.type == Event::Closed)
 				window->Close();
+			if (Keyboard::isKeyPressed(Keyboard::Num1)) {
+				if (a == 1 && keypressed == false) {
+					a = 0;
+					keypressed = true;
+				}
+				else if(a != 1 && keypressed == false) {
+					a = 1;
+					keypressed = true;
+				}
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Num2)) {
+				if (a == 2 && keypressed == false) {
+					a = 0;
+					keypressed = true;
+				}
+				else if (a != 2 && keypressed == false) {
+					a = 2;
+					keypressed = true;
+				}
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Num3)) {
+				if (a == 3 && keypressed == false) {
+					a = 0;
+					keypressed = true;
+				}
+				else if (a != 3 && keypressed == false) {
+					a = 3;
+					keypressed = true;
+				}
+			}
+			else if (Keyboard::isKeyPressed(Keyboard::Num1) == false && Keyboard::isKeyPressed(Keyboard::Num2) == false && Keyboard::isKeyPressed(Keyboard::Num3) == false) {
+				keypressed = false;
+			}
 			if (Mouse::isButtonPressed(Mouse::Button::Left) and IsOnPlay())
 				std::cout << "PLAY" << std::endl;
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus() and IsOnSun(localposition));
 			else if (Mouse::isButtonPressed(Mouse::Button::Left) and window->w_window->hasFocus()) {
 				if (money >= 100)
-					PlacePlante();
+					PlacePlante(a);
 			}
 		}
 		LimitFps();
